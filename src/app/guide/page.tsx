@@ -53,10 +53,10 @@ function GuideContent() {
     let aiResponse = "";
 
     if (
-      input.includes("完成了") ||
-      input.includes("好了") ||
-      input.includes("OK") ||
-      input.includes("ok")
+      text.includes("完成了") ||
+      text.includes("好了") ||
+      text.includes("OK") ||
+      text.includes("ok")
     ) {
       const nextStep = currentStep + 1;
       if (nextStep < steps.length) {
@@ -65,14 +65,14 @@ function GuideContent() {
       } else {
         aiResponse = `恭喜你！🎉 你已经完成了所有步骤！\n\n现在你可以开始赚钱了！\n\n记住：\n• 坚持每天做\n• 遇到问题随时问我\n• 有任何进展告诉我\n\n祝你早日实现目标！💰`;
       }
-    } else if (input.includes("怎么做") || input.includes("详细")) {
+    } else if (text.includes("怎么做") || text.includes("详细")) {
       aiResponse = `好的，我来详细解释一下：\n\n这一步的关键是：\n1. 不要着急，慢慢来\n2. 按照提示一步步操作\n3. 遇到困难可以问我\n\n有什么具体问题吗？`;
-    } else if (input.includes("问题") || input.includes("不会")) {
+    } else if (text.includes("问题") || text.includes("不会")) {
       aiResponse = `没问题，我来帮你：\n\n你可以把具体问题告诉我，比如：\n• "这个APP怎么下载？"\n• "注册时遇到问题了"\n• "不知道怎么操作"\n\n我会给你详细的解决方法。`;
-    } else if (input.includes("赚了") || input.includes("收入")) {
+    } else if (text.includes("赚了") || text.includes("收入")) {
       aiResponse = `太好了！💰\n\n有了收入就说明方向是对的！\n\n建议你：\n1. 记录每天的收入\n2. 总结什么方法最有效\n3. 把经验分享给更多人\n\n继续加油！`;
     } else {
-      aiResponse = `收到！\n\n关于"${input.substring(0, 20)}..."：\n\n这是一个很好的问题。建议你：\n1. 先完成当前步骤\n2. 如果有具体操作问题，告诉我\n3. 我会给你详细的解决方案\n\n现在继续完成这一步吧！`;
+      aiResponse = `收到！\n\n关于"${text.substring(0, 20)}..."：\n\n这是一个很好的问题。建议你：\n1. 先完成当前步骤\n2. 如果有具体操作问题，告诉我\n3. 我会给你详细的解决方案\n\n现在继续完成这一步吧！`;
     }
 
     const aiMessage: Message = {
