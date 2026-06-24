@@ -31,7 +31,6 @@ function GuideContent() {
   const steps = hustle.steps;
 
   useEffect(() => {
-    // 恢复进度
     const savedProgress = progress[hustle.id];
     if (savedProgress && !savedProgress.completed) {
       setCurrentStep(savedProgress.currentStep);
@@ -55,7 +54,6 @@ function GuideContent() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // 保存进度
   useEffect(() => {
     setProgress((prev) => ({
       ...prev,
@@ -114,28 +112,38 @@ function GuideContent() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 p-4">
-        <div className="max-w-2xl mx-auto flex items-center gap-3">
-          <span className="text-2xl">🤖</span>
-          <div>
-            <h1 className="font-bold">AI副业教练</h1>
-            <p className="text-xs text-green-500">在线 · 随时为你服务</p>
+      <header className="glass sticky top-0 z-10 border-b border-gray-100">
+        <div className="max-w-2xl mx-auto px-6 py-4">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center shadow-soft">
+              <span className="text-2xl">🤖</span>
+            </div>
+            <div>
+              <h1 className="font-bold text-gray-800">AI副业教练</h1>
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                <span className="text-xs text-green-600">在线</span>
+              </div>
+            </div>
           </div>
         </div>
       </header>
 
       {/* Progress */}
-      <div className="bg-white border-b border-gray-200 p-3">
+      <div className="bg-white border-b border-gray-100 px-6 py-3">
         <div className="max-w-2xl mx-auto">
           <div className="flex items-center justify-between text-sm mb-2">
-            <span className="text-gray-600">📍 {hustleName}</span>
-            <span className="text-green-600 font-bold">
+            <span className="text-gray-600 flex items-center gap-2">
+              <span className="text-lg">📍</span>
+              {hustleName}
+            </span>
+            <span className="font-bold text-green-600">
               {currentStep + 1} / {steps.length}
             </span>
           </div>
-          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div className="progress-bar">
             <div
-              className="h-full bg-green-500 transition-all duration-500"
+              className="progress-bar-fill"
               style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
             />
           </div>
@@ -150,14 +158,13 @@ function GuideContent() {
               key={index}
               className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} animate-fade-in`}
             >
-              <div
-                className={`max-w-[85%] rounded-2xl p-4 ${
-                  msg.role === "user"
-                    ? "bg-green-500 text-white rounded-br-md"
-                    : "bg-white text-gray-800 rounded-bl-md card-shadow"
-                }`}
-              >
-                <div className="whitespace-pre-wrap text-sm leading-relaxed">
+              {msg.role === "ai" && (
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center mr-2 flex-shrink-0 mt-1">
+                  <span className="text-sm">🤖</span>
+                </div>
+              )}
+              <div className={`chat-bubble ${msg.role === "user" ? "chat-bubble-user" : "chat-bubble-ai"}`}>
+                <div className="whitespace-pre-wrap">
                   {msg.content.split("**").map((part, i) =>
                     i % 2 === 1 ? (
                       <strong key={i} className="font-bold">{part}</strong>
@@ -174,12 +181,15 @@ function GuideContent() {
           ))}
 
           {isLoading && (
-            <div className="flex justify-start">
-              <div className="bg-white rounded-2xl rounded-bl-md p-4 card-shadow">
-                <div className="flex gap-1">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }} />
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }} />
+            <div className="flex justify-start animate-fade-in">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center mr-2 flex-shrink-0">
+                <span className="text-sm">🤖</span>
+              </div>
+              <div className="chat-bubble chat-bubble-ai">
+                <div className="flex gap-1.5">
+                  <div className="w-2.5 h-2.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0s' }} />
+                  <div className="w-2.5 h-2.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.15s' }} />
+                  <div className="w-2.5 h-2.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }} />
                 </div>
               </div>
             </div>
@@ -189,14 +199,14 @@ function GuideContent() {
       </main>
 
       {/* Quick Replies */}
-      <div className="bg-white border-t border-gray-200 p-3">
+      <div className="bg-white border-t border-gray-100 px-4 py-3">
         <div className="max-w-2xl mx-auto">
-          <div className="flex gap-2 overflow-x-auto">
+          <div className="flex gap-2 overflow-x-auto pb-2">
             {["完成了", "怎么做？", "有问题", "赚到钱了"].map((reply) => (
               <button
                 key={reply}
                 onClick={() => handleSend(reply)}
-                className="px-4 py-2 bg-gray-100 rounded-full text-sm text-gray-700 hover:bg-gray-200 whitespace-nowrap"
+                className="quick-reply"
               >
                 {reply}
               </button>
@@ -206,7 +216,7 @@ function GuideContent() {
       </div>
 
       {/* Input */}
-      <div className="bg-white border-t border-gray-200 p-4">
+      <div className="bg-white border-t border-gray-100 p-4">
         <div className="max-w-2xl mx-auto flex gap-3">
           <input
             type="text"
@@ -214,18 +224,20 @@ function GuideContent() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
             placeholder="输入你的问题..."
-            className="flex-1 px-4 py-3 bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="input flex-1"
           />
           <button
             onClick={() => handleSend()}
             disabled={!input.trim() || isLoading}
-            className={`px-6 py-3 rounded-full font-medium ${
+            className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${
               input.trim() && !isLoading
-                ? "bg-green-500 text-white hover:bg-green-600"
+                ? "bg-green-500 text-white hover:bg-green-600 shadow-soft"
                 : "bg-gray-200 text-gray-400"
             }`}
           >
-            发送
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
           </button>
         </div>
       </div>
@@ -235,7 +247,16 @@ function GuideContent() {
 
 export default function GuidePage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><div className="text-6xl mb-4 animate-pulse-soft">🤖</div></div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="text-center">
+            <div className="text-7xl mb-6 animate-float">🤖</div>
+            <h2 className="text-xl font-bold text-gray-800 mb-2">加载中...</h2>
+          </div>
+        </div>
+      }
+    >
       <GuideContent />
     </Suspense>
   );

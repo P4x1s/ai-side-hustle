@@ -17,52 +17,57 @@ const questions = [
     question: "你在哪个城市/地区？",
     placeholder: "例如：北京、成都、河南县城",
     icon: "📍",
+    color: "green",
   },
   {
     id: "timePerDay",
     question: "每天有多少空闲时间？",
     options: [
-      { value: "1小时以内", label: "1小时以内" },
-      { value: "1-3小时", label: "1-3小时" },
-      { value: "3-5小时", label: "3-5小时" },
-      { value: "5小时以上", label: "5小时以上" },
+      { value: "1小时以内", label: "1小时以内", icon: "⏰" },
+      { value: "1-3小时", label: "1-3小时", icon: "🕐" },
+      { value: "3-5小时", label: "3-5小时", icon: "⏳" },
+      { value: "5小时以上", label: "5小时以上", icon: "🕗" },
     ],
     icon: "⏰",
+    color: "purple",
   },
   {
     id: "skills",
     question: "你会用智能手机做什么？（可多选）",
     options: [
-      { value: "发朋友圈、聊天", label: "发朋友圈、聊天" },
-      { value: "拍照、拍视频", label: "拍照、拍视频" },
-      { value: "网购、比价", label: "网购、比价" },
-      { value: "基本办公（Word、Excel）", label: "基本办公" },
-      { value: "以上都不会", label: "以上都不会" },
+      { value: "发朋友圈、聊天", label: "发朋友圈、聊天", icon: "💬" },
+      { value: "拍照、拍视频", label: "拍照、拍视频", icon: "📷" },
+      { value: "网购、比价", label: "网购、比价", icon: "🛒" },
+      { value: "基本办公（Word、Excel）", label: "基本办公", icon: "💻" },
+      { value: "以上都不会", label: "以上都不会", icon: "😅" },
     ],
     multiple: true,
     icon: "📱",
+    color: "blue",
   },
   {
     id: "capital",
     question: "有没有启动资金？",
     options: [
-      { value: "没有", label: "没有，零成本" },
-      { value: "1000以内", label: "1000元以内" },
-      { value: "1000-5000", label: "1000-5000元" },
-      { value: "5000以上", label: "5000元以上" },
+      { value: "没有", label: "没有，零成本", icon: "🆓" },
+      { value: "1000以内", label: "1000元以内", icon: "💵" },
+      { value: "1000-5000", label: "1000-5000元", icon: "💰" },
+      { value: "5000以上", label: "5000元以上", icon: "🤑" },
     ],
     icon: "💰",
+    color: "yellow",
   },
   {
     id: "goal",
     question: "你希望月收入达到多少？",
     options: [
-      { value: "1000-3000", label: "1000-3000元（补贴家用）" },
-      { value: "3000-5000", label: "3000-5000元（基本收入）" },
-      { value: "5000-10000", label: "5000-10000元（不错了）" },
-      { value: "10000以上", label: "10000元以上（多多益善）" },
+      { value: "1000-3000", label: "1000-3000元（补贴家用）", icon: "🏠" },
+      { value: "3000-5000", label: "3000-5000元（基本收入）", icon: "💼" },
+      { value: "5000-10000", label: "5000-10000元（不错了）", icon: "🎉" },
+      { value: "10000以上", label: "10000元以上（多多益善）", icon: "🚀" },
     ],
     icon: "🎯",
+    color: "red",
   },
 ];
 
@@ -135,22 +140,32 @@ export default function DiagnosePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 p-4">
-        <div className="max-w-2xl mx-auto">
-          <div className="flex items-center justify-between mb-3">
+      <header className="glass sticky top-0 z-10 border-b border-gray-100">
+        <div className="max-w-2xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between mb-4">
             <button
               onClick={handleBack}
-              className={`text-gray-500 ${currentStep === 0 ? "invisible" : ""}`}
+              className={`flex items-center gap-2 text-gray-500 hover:text-gray-700 transition-colors ${
+                currentStep === 0 ? "invisible" : ""
+              }`}
             >
-              ← 返回
+              <span className="text-lg">←</span>
+              <span className="text-sm">返回</span>
             </button>
-            <span className="text-sm text-gray-500">
-              {currentStep + 1} / {questions.length}
-            </span>
+            
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">{currentQuestion.icon}</span>
+              <span className="text-sm font-medium text-gray-500">
+                {currentStep + 1} / {questions.length}
+              </span>
+            </div>
+            
+            <div className="w-16"></div>
           </div>
-          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+          
+          <div className="progress-bar">
             <div
-              className="h-full bg-green-500 transition-all duration-300"
+              className="progress-bar-fill"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -158,17 +173,18 @@ export default function DiagnosePage() {
       </header>
 
       {/* Question */}
-      <main className="max-w-2xl mx-auto p-6">
+      <main className="max-w-2xl mx-auto px-6 py-8">
         <div className="animate-fade-in">
-          <div className="text-5xl mb-6">{currentQuestion.icon}</div>
-
-          <h2 className="text-2xl font-bold text-gray-800 mb-8">
-            {currentQuestion.question}
-          </h2>
+          <div className="text-center mb-8">
+            <div className="text-6xl mb-4 emoji-bounce">{currentQuestion.icon}</div>
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 leading-tight">
+              {currentQuestion.question}
+            </h2>
+          </div>
 
           {currentQuestion.options ? (
             <div className="space-y-3">
-              {currentQuestion.options.map((option) => {
+              {currentQuestion.options.map((option, index) => {
                 const isSelected = currentQuestion.multiple
                   ? selectedSkills.includes(option.value)
                   : formData[currentQuestion.id as keyof FormData] === option.value;
@@ -177,15 +193,18 @@ export default function DiagnosePage() {
                   <button
                     key={option.value}
                     onClick={() => handleSelect(option.value)}
-                    className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
-                      isSelected
-                        ? "border-green-500 bg-green-50 text-green-700"
-                        : "border-gray-200 bg-white hover:border-gray-300"
+                    className={`option-btn animate-fade-in ${
+                      isSelected ? "selected" : ""
                     }`}
+                    style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
+                      <span className="text-2xl">{option.icon}</span>
+                      <span className="flex-1 text-left font-medium text-gray-700">
+                        {option.label}
+                      </span>
                       <div
-                        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                        className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
                           isSelected
                             ? "border-green-500 bg-green-500"
                             : "border-gray-300"
@@ -193,7 +212,7 @@ export default function DiagnosePage() {
                       >
                         {isSelected && (
                           <svg
-                            className="w-3 h-3 text-white"
+                            className="w-4 h-4 text-white"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -207,39 +226,47 @@ export default function DiagnosePage() {
                           </svg>
                         )}
                       </div>
-                      <span>{option.label}</span>
                     </div>
                   </button>
                 );
               })}
             </div>
           ) : (
-            <input
-              type="text"
-              value={formData[currentQuestion.id as keyof FormData]}
-              onChange={(e) => handleTextChange(e.target.value)}
-              placeholder={currentQuestion.placeholder}
-              className="w-full p-4 rounded-xl border-2 border-gray-200 focus:border-green-500 focus:outline-none text-lg"
-            />
+            <div className="relative">
+              <input
+                type="text"
+                value={formData[currentQuestion.id as keyof FormData]}
+                onChange={(e) => handleTextChange(e.target.value)}
+                placeholder={currentQuestion.placeholder}
+                className="input text-lg"
+                autoFocus
+              />
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
+                {currentQuestion.icon}
+              </div>
+            </div>
           )}
 
           {currentQuestion.multiple && (
-            <p className="text-sm text-gray-500 mt-4">
-              已选择 {selectedSkills.length} 项
-            </p>
+            <div className="mt-4 text-center">
+              <span className="inline-flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-medium">
+                <span className="w-5 h-5 bg-green-500 text-white rounded-full flex items-center justify-center text-xs">
+                  {selectedSkills.length}
+                </span>
+                已选择 {selectedSkills.length} 项
+              </span>
+            </div>
           )}
         </div>
 
         {/* Navigation */}
-        <div className="mt-8 flex gap-4">
+        <div className="mt-10">
           {isLastStep ? (
             <button
               onClick={handleSubmit}
               disabled={!canProceed()}
-              className={`flex-1 py-4 rounded-xl text-lg font-bold transition-colors ${
-                canProceed()
-                  ? "bg-green-500 text-white hover:bg-green-600"
-                  : "bg-gray-200 text-gray-400 cursor-not-allowed"
+              className={`w-full btn-primary text-lg ${
+                !canProceed() ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >
               开始诊断 🚀
@@ -248,10 +275,8 @@ export default function DiagnosePage() {
             <button
               onClick={handleNext}
               disabled={!canProceed()}
-              className={`flex-1 py-4 rounded-xl text-lg font-bold transition-colors ${
-                canProceed()
-                  ? "bg-green-500 text-white hover:bg-green-600"
-                  : "bg-gray-200 text-gray-400 cursor-not-allowed"
+              className={`w-full btn-primary text-lg ${
+                !canProceed() ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >
               下一步 →
