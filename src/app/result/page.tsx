@@ -10,6 +10,7 @@ interface SideHustle {
   potential: string;
   steps: string[];
   tips: string;
+  适合?: { capital: string[]; time: string[] };
 }
 
 function ResultContent() {
@@ -33,12 +34,26 @@ function ResultContent() {
 
   const generateRecommendations = async () => {
     setLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 1500));
 
-    // Simulate AI response for MVP
-    // In production, this would call the OpenAI API
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    const mockRecommendations: SideHustle[] = [
+    // 根据用户情况生成不同的推荐
+    const allHustles: SideHustle[] = [
+      // 适合零成本、时间少的
+      {
+        name: "闲鱼无货源卖货",
+        description: "在闲鱼上卖货，不用囤货，赚差价",
+        difficulty: "简单",
+        potential: "月入1000-3000元",
+        steps: [
+          "下载闲鱼APP，注册账号",
+          "在1688或拼多多找热门商品",
+          "把商品信息搬运到闲鱼",
+          "有人下单后，去上家下单发货",
+          "赚取中间差价",
+        ],
+        tips: "选择轻小件商品，避免售后问题。保持每天上新，提高曝光率。",
+       适合: { capital: ["没有", "1000以内"], time: ["1小时以内", "1-3小时"] },
+      },
       {
         name: "社区团购团长",
         description: "帮小区邻居团购水果生鲜，每单赚佣金",
@@ -52,20 +67,7 @@ function ResultContent() {
           "通知邻居取货，完成交易",
         ],
         tips: "选择人多的小区，保持良好的服务态度，复购率会越来越高。",
-      },
-      {
-        name: "闲鱼无货源卖货",
-        description: "在闲鱼上卖货，不用囤货，赚差价",
-        difficulty: "中等",
-        potential: "月入1000-3000元",
-        steps: [
-          "下载闲鱼APP，注册账号",
-          "在1688或拼多多找热门商品",
-          "把商品信息搬运到闲鱼",
-          "有人下单后，去上家下单发货",
-          "赚取中间差价",
-        ],
-        tips: "选择轻小件商品，避免售后问题。保持每天上新，提高曝光率。",
+        适合: { capital: ["没有", "1000以内"], time: ["1-3小时", "3-5小时"] },
       },
       {
         name: "短视频带货",
@@ -80,10 +82,99 @@ function ResultContent() {
           "挂上商品链接，有人购买赚佣金",
         ],
         tips: "不需要露脸，拍产品使用过程就行。保持每天更新，积累粉丝。",
+        适合: { capital: ["没有", "1000以内", "1000-5000"], time: ["1-3小时", "3-5小时"] },
+      },
+      {
+        name: "跑腿代办",
+        description: "帮人排队、取送文件、办事",
+        difficulty: "简单",
+        potential: "月入2000-4000元",
+        steps: [
+          "下载UU跑腿或闪送APP",
+          "注册并完成实名认证",
+          "接单后按要求完成任务",
+          "完成后确认收款",
+          "积累好评，提高接单量",
+        ],
+        tips: "选择熟悉的区域接单，注意安全，保持礼貌。",
+        适合: { capital: ["没有"], time: ["3-5小时", "5小时以上"] },
+      },
+      {
+        name: "手工制品售卖",
+        description: "做手工艺品在网上卖",
+        difficulty: "中等",
+        potential: "月入1000-5000元",
+        steps: [
+          "学习一种简单手工（编织、串珠等）",
+          "制作成品，拍照上传",
+          "在闲鱼或淘宝开店",
+          "定价要考虑材料成本和时间",
+          "积累口碑，发展定制业务",
+        ],
+        tips: "从简单的款式开始，逐步提高。在小红书分享制作过程可以引流。",
+        适合: { capital: ["1000以内", "1000-5000"], time: ["1-3小时", "3-5小时"] },
+      },
+      {
+        name: "私房烘焙",
+        description: "在家做蛋糕、饼干卖给邻居",
+        difficulty: "中等",
+        potential: "月入3000-8000元",
+        steps: [
+          "购买基础烘焙工具和材料",
+          "学习几款简单的蛋糕、饼干",
+          "在朋友圈和业主群宣传",
+          "接受预订，按订单制作",
+          "积累客户，发展回头客",
+        ],
+        tips: "先从简单的杯子蛋糕开始，保证食品安全，办个健康证。",
+        适合: { capital: ["1000-5000", "5000以上"], time: ["3-5小时", "5小时以上"] },
+      },
+      {
+        name: "本地自媒体",
+        description: "拍本地生活内容，接广告赚钱",
+        difficulty: "中等",
+        potential: "月入2000-10000元",
+        steps: [
+          "确定内容方向（美食探店、生活vlog等）",
+          "每天发布1-2条短视频",
+          "积累1000粉丝后开通收益",
+          "接本地商家广告",
+          "发展粉丝社群",
+        ],
+        tips: "真实比精致更重要，坚持更新是关键。",
+        适合: { capital: ["没有", "1000以内"], time: ["1-3小时", "3-5小时"] },
+      },
+      {
+        name: "技能教学",
+        description: "教别人你会的东西",
+        difficulty: "中等",
+        potential: "月入3000-10000元",
+        steps: [
+          "确定你会教什么（做饭、化妆、健身等）",
+          "录制几节免费试听课",
+          "在小红书或抖音发布",
+          "开设付费课程",
+          "建立学员社群",
+        ],
+        tips: "先免费教几个人，积累口碑后再收费。",
+        适合: { capital: ["没有"], time: ["1-3小时", "3-5小时"] },
       },
     ];
 
-    setRecommendations(mockRecommendations);
+    // 根据用户情况筛选和排序
+    const scored = allHustles.map((hustle) => {
+      let score = 0;
+      if (hustle.适合.capital.includes(formData.capital)) score += 2;
+      if (hustle.适合.time.includes(formData.timePerDay)) score += 2;
+      if (formData.skills.includes("发朋友圈")) score += 1;
+      if (formData.skills.includes("拍照")) score += 1;
+      return { ...hustle, score };
+    });
+
+    scored.sort((a, b) => b.score - a.score);
+    const recommendations = scored.slice(0, 3).map(({ score, ...rest }) => rest);
+
+    setRecommendations(recommendations);
     setLoading(false);
   };
 

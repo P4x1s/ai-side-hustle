@@ -34,12 +34,13 @@ function GuideContent() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleSend = async () => {
-    if (!input.trim() || isLoading) return;
+  const handleSend = async (messageText?: string) => {
+    const text = messageText || input;
+    if (!text.trim() || isLoading) return;
 
     const userMessage: Message = {
       role: "user",
-      content: input,
+      content: text,
       timestamp: new Date(),
     };
     setMessages((prev) => [...prev, userMessage]);
@@ -189,10 +190,7 @@ function GuideContent() {
             {["完成了", "怎么做？", "有问题", "赚到钱了"].map((reply) => (
               <button
                 key={reply}
-                onClick={() => {
-                  setInput(reply);
-                  setTimeout(() => handleSend(), 100);
-                }}
+                onClick={() => handleSend(reply)}
                 className="px-4 py-2 bg-gray-100 rounded-full text-sm text-gray-700 hover:bg-gray-200 whitespace-nowrap"
               >
                 {reply}
