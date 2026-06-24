@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import { sideHustles } from "@/data/hustles";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 interface Message {
   role: "ai" | "user";
@@ -9,72 +11,11 @@ interface Message {
   timestamp: Date;
 }
 
-const hustleSteps: Record<string, string[]> = {
-  "闲鱼无货源卖货": [
-    "下载闲鱼APP，用手机号注册账号",
-    "打开1688.com，搜索热门商品（如手机壳、数据线）",
-    "复制商品图片和描述，发布到闲鱼",
-    "有人下单后，去1688下单，填写买家地址",
-    "1688发货后，把快递单号填到闲鱼",
-    "买家确认收货，你赚取差价",
-  ],
-  "社区团购团长": [
-    "打开微信，搜索'美团优选'或'多多买菜'",
-    "点击'成为团长'，按提示注册",
-    "在小区业主群发布第一条团购信息",
-    "收集邻居订单，汇总提交给平台",
-    "到货后通知邻居取货",
-    "完成交易，佣金到账",
-  ],
-  "短视频带货": [
-    "下载抖音APP，注册并完善资料",
-    "发布10条日常视频，积累基础粉丝",
-    "粉丝达到1000后，开通商品橱窗",
-    "在选品中心选择佣金高的商品",
-    "拍摄商品使用视频，挂上链接",
-    "有人购买，你赚佣金",
-  ],
-  "跑腿代办": [
-    "下载UU跑腿或闪送APP",
-    "完成注册和实名认证",
-    "在熟悉区域接第一单",
-    "按要求完成任务（取送/排队等）",
-    "完成后确认收款",
-    "积累好评，提高接单量",
-  ],
-  "手工制品售卖": [
-    "选择一种简单手工（编织/串珠等）",
-    "购买基础材料（100元以内）",
-    "制作3-5件成品",
-    "拍照上传到闲鱼",
-    "定价：材料费+时间（每小时20元）",
-    "有订单后开始稳定制作",
-  ],
-  "私房烘焙": [
-    "购买基础工具（烤箱+模具约500元）",
-    "学习制作简单的杯子蛋糕",
-    "先做给朋友试吃，收集反馈",
-    "在朋友圈发布，接受预订",
-    "按订单制作，保证新鲜",
-    "积累回头客，扩大口碑",
-  ],
-  "本地自媒体": [
-    "确定内容方向（美食/生活/探店）",
-    "每天发布1-2条短视频",
-    "坚持30天，积累1000粉丝",
-    "开通创作者收益",
-    "联系本地商家谈合作",
-    "发展粉丝社群",
-  ],
-  "技能教学": [
-    "确定你要教什么（做饭/化妆/健身）",
-    "录制3节免费试听课",
-    "在小红书发布，吸引关注",
-    "收集反馈，优化内容",
-    "开设付费课程（99元起）",
-    "建立学员社群，持续服务",
-  ],
-};
+interface UserProgress {
+  hustleId: string;
+  currentStep: number;
+  completed: boolean;
+}
 
 function GuideContent() {
   const searchParams = useSearchParams();
@@ -82,23 +23,49 @@ function GuideContent() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
+  const [progress, setProgress] = useLocalStorage<Record<string, UserProgress>>("hustle-progress", {});
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const hustleName = searchParams.get("name") || "社区团购团长";
-  const steps = hustleSteps[hustleName] || hustleSteps["社区团购团长"];
+  const hustle = sideHustles.find((h) => h.name === hustleName) || sideHustles[0];
+  const steps = hustle.steps;
 
   useEffect(() => {
-    const welcomeMessage: Message = {
-      role: "ai",
-      content: `你好！我是你的AI副业教练 🤖\n\n你选择了「${hustleName}」，我会手把手带你做。\n\n我们从第一步开始：\n\n**第1步：${steps[0]}**\n\n完成后点击"完成了"，我教你下一步。`,
-      timestamp: new Date(),
-    };
-    setMessages([welcomeMessage]);
+    // 恢复进度
+    const savedProgress = progress[hustle.id];
+    if (savedProgress && !savedProgress.completed) {
+      setCurrentStep(savedProgress.currentStep);
+      const welcomeMessage: Message = {
+        role: "ai",
+        content: `欢迎回来！你正在做「${hustleName}」\n\n上次做到第${savedProgress.currentStep + 1}步：\n\n**${steps[savedProgress.currentStep]}**\n\n继续加油！完成后点"完成了"。`,
+        timestamp: new Date(),
+      };
+      setMessages([welcomeMessage]);
+    } else {
+      const welcomeMessage: Message = {
+        role: "ai",
+        content: `你好！我是你的AI副业教练 🤖\n\n你选择了「${hustleName}」，我会手把手带你做。\n\n我们从第一步开始：\n\n**第1步：${steps[0]}**\n\n完成后点击"完成了"，我教你下一步。`,
+        timestamp: new Date(),
+      };
+      setMessages([welcomeMessage]);
+    }
   }, [hustleName]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // 保存进度
+  useEffect(() => {
+    setProgress((prev) => ({
+      ...prev,
+      [hustle.id]: {
+        hustleId: hustle.id,
+        currentStep,
+        completed: currentStep >= steps.length - 1,
+      },
+    }));
+  }, [currentStep, hustle.id, steps.length]);
 
   const handleSend = async (messageText?: string) => {
     const text = messageText || input;
@@ -129,8 +96,10 @@ function GuideContent() {
       aiResponse = `关于这一步，我来帮你：\n\n**${steps[currentStep]}**\n\n具体操作：\n1. 不要着急，慢慢来\n2. 按照提示一步步操作\n3. 遇到困难截图发给我\n\n有什么具体问题吗？`;
     } else if (text.includes("赚了") || text.includes("收入")) {
       aiResponse = `太好了！💰 有了收入说明方向对了！\n\n建议：\n1. 记录每天赚了多少\n2. 总结什么方法最有效\n3. 继续坚持\n\n下一步：${currentStep + 1 < steps.length ? steps[currentStep + 1] : "你已经完成所有步骤了！"}`;
+    } else if (text.includes("换个") || text.includes("换一个")) {
+      aiResponse = `好的，你可以返回重新选择其他副业。\n\n当前推荐的副业都适合你的情况，试试其他的？`;
     } else {
-      aiResponse = `收到！\n\n当前进度：第${currentStep + 1}步 / 共${steps.length}步\n\n当前任务：**${steps[currentStep]}**\n\n完成后点"就行了"，我教你下一步。`;
+      aiResponse = `收到！\n\n当前进度：第${currentStep + 1}步 / 共${steps.length}步\n\n当前任务：**${steps[currentStep]}**\n\n完成后点"完成了"，我教你下一步。`;
     }
 
     const aiMessage: Message = {
