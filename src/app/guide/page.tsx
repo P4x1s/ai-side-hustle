@@ -94,8 +94,6 @@ function GuideContent() {
       aiResponse = `关于这一步，我来帮你：\n\n**${steps[currentStep]}**\n\n具体操作：\n1. 不要着急，慢慢来\n2. 按照提示一步步操作\n3. 遇到困难截图发给我\n\n有什么具体问题吗？`;
     } else if (text.includes("赚了") || text.includes("收入")) {
       aiResponse = `太好了！💰 有了收入说明方向对了！\n\n建议：\n1. 记录每天赚了多少\n2. 总结什么方法最有效\n3. 继续坚持\n\n下一步：${currentStep + 1 < steps.length ? steps[currentStep + 1] : "你已经完成所有步骤了！"}`;
-    } else if (text.includes("换个") || text.includes("换一个")) {
-      aiResponse = `好的，你可以返回重新选择其他副业。\n\n当前推荐的副业都适合你的情况，试试其他的？`;
     } else {
       aiResponse = `收到！\n\n当前进度：第${currentStep + 1}步 / 共${steps.length}步\n\n当前任务：**${steps[currentStep]}**\n\n完成后点"完成了"，我教你下一步。`;
     }
@@ -112,17 +110,17 @@ function GuideContent() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
-      <header className="glass sticky top-0 z-10 border-b border-gray-100">
+      <header className="bg-white/95 backdrop-blur-sm sticky top-0 z-10 border-b border-gray-100">
         <div className="max-w-2xl mx-auto px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center shadow-soft">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-sm">
               <span className="text-2xl">🤖</span>
             </div>
             <div>
               <h1 className="font-bold text-gray-800">AI副业教练</h1>
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                <span className="text-xs text-green-600">在线</span>
+                <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                <span className="text-xs text-emerald-600">在线</span>
               </div>
             </div>
           </div>
@@ -133,17 +131,14 @@ function GuideContent() {
       <div className="bg-white border-b border-gray-100 px-6 py-3">
         <div className="max-w-2xl mx-auto">
           <div className="flex items-center justify-between text-sm mb-2">
-            <span className="text-gray-600 flex items-center gap-2">
-              <span className="text-lg">📍</span>
-              {hustleName}
-            </span>
-            <span className="font-bold text-green-600">
+            <span className="text-gray-600">📍 {hustleName}</span>
+            <span className="font-bold text-emerald-600">
               {currentStep + 1} / {steps.length}
             </span>
           </div>
-          <div className="progress-bar">
+          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
             <div
-              className="progress-bar-fill"
+              className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full transition-all duration-500"
               style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
             />
           </div>
@@ -159,11 +154,17 @@ function GuideContent() {
               className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} animate-fade-in`}
             >
               {msg.role === "ai" && (
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center mr-2 flex-shrink-0 mt-1">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center mr-2 flex-shrink-0 mt-1">
                   <span className="text-sm">🤖</span>
                 </div>
               )}
-              <div className={`chat-bubble ${msg.role === "user" ? "chat-bubble-user" : "chat-bubble-ai"}`}>
+              <div
+                className={`max-w-[85%] rounded-2xl p-4 text-sm leading-relaxed ${
+                  msg.role === "user"
+                    ? "bg-gradient-to-br from-emerald-500 to-emerald-600 text-white rounded-br-md"
+                    : "bg-white text-gray-800 rounded-bl-md shadow-sm"
+                }`}
+              >
                 <div className="whitespace-pre-wrap">
                   {msg.content.split("**").map((part, i) =>
                     i % 2 === 1 ? (
@@ -173,7 +174,7 @@ function GuideContent() {
                     )
                   )}
                 </div>
-                <div className={`text-xs mt-2 ${msg.role === "user" ? "text-green-100" : "text-gray-400"}`}>
+                <div className={`text-xs mt-2 ${msg.role === "user" ? "text-emerald-100" : "text-gray-400"}`}>
                   {msg.timestamp.toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" })}
                 </div>
               </div>
@@ -182,12 +183,12 @@ function GuideContent() {
 
           {isLoading && (
             <div className="flex justify-start animate-fade-in">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center mr-2 flex-shrink-0">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center mr-2 flex-shrink-0">
                 <span className="text-sm">🤖</span>
               </div>
-              <div className="chat-bubble chat-bubble-ai">
+              <div className="bg-white rounded-2xl rounded-bl-md p-4 shadow-sm">
                 <div className="flex gap-1.5">
-                  <div className="w-2.5 h-2.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0s' }} />
+                  <div className="w-2.5 h-2.5 bg-gray-400 rounded-full animate-bounce" />
                   <div className="w-2.5 h-2.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.15s' }} />
                   <div className="w-2.5 h-2.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }} />
                 </div>
@@ -206,7 +207,7 @@ function GuideContent() {
               <button
                 key={reply}
                 onClick={() => handleSend(reply)}
-                className="quick-reply"
+                className="px-4 py-2 rounded-full bg-white border border-gray-200 text-sm text-gray-600 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-600 transition-all whitespace-nowrap"
               >
                 {reply}
               </button>
@@ -224,14 +225,14 @@ function GuideContent() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
             placeholder="输入你的问题..."
-            className="input flex-1"
+            className="flex-1 px-4 py-3 bg-gray-100 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
           />
           <button
             onClick={() => handleSend()}
             disabled={!input.trim() || isLoading}
             className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${
               input.trim() && !isLoading
-                ? "bg-green-500 text-white hover:bg-green-600 shadow-soft"
+                ? "bg-emerald-500 text-white hover:bg-emerald-600 shadow-sm"
                 : "bg-gray-200 text-gray-400"
             }`}
           >
@@ -251,7 +252,7 @@ export default function GuidePage() {
       fallback={
         <div className="min-h-screen bg-gray-50 flex items-center justify-center">
           <div className="text-center">
-            <div className="text-7xl mb-6 animate-float">🤖</div>
+            <div className="text-7xl mb-6">🤖</div>
             <h2 className="text-xl font-bold text-gray-800 mb-2">加载中...</h2>
           </div>
         </div>

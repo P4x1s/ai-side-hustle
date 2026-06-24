@@ -17,7 +17,6 @@ const questions = [
     question: "你在哪个城市/地区？",
     placeholder: "例如：北京、成都、河南县城",
     icon: "📍",
-    color: "green",
   },
   {
     id: "timePerDay",
@@ -29,7 +28,6 @@ const questions = [
       { value: "5小时以上", label: "5小时以上", icon: "🕗" },
     ],
     icon: "⏰",
-    color: "purple",
   },
   {
     id: "skills",
@@ -43,7 +41,6 @@ const questions = [
     ],
     multiple: true,
     icon: "📱",
-    color: "blue",
   },
   {
     id: "capital",
@@ -55,7 +52,6 @@ const questions = [
       { value: "5000以上", label: "5000元以上", icon: "🤑" },
     ],
     icon: "💰",
-    color: "yellow",
   },
   {
     id: "goal",
@@ -67,7 +63,6 @@ const questions = [
       { value: "10000以上", label: "10000元以上（多多益善）", icon: "🚀" },
     ],
     icon: "🎯",
-    color: "red",
   },
 ];
 
@@ -140,7 +135,7 @@ export default function DiagnosePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="glass sticky top-0 z-10 border-b border-gray-100">
+      <header className="bg-white/95 backdrop-blur-sm sticky top-0 z-10 border-b border-gray-100">
         <div className="max-w-2xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between mb-4">
             <button
@@ -149,7 +144,7 @@ export default function DiagnosePage() {
                 currentStep === 0 ? "invisible" : ""
               }`}
             >
-              <span className="text-lg">←</span>
+              <span>←</span>
               <span className="text-sm">返回</span>
             </button>
             
@@ -163,9 +158,9 @@ export default function DiagnosePage() {
             <div className="w-16"></div>
           </div>
           
-          <div className="progress-bar">
+          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
             <div
-              className="progress-bar-fill"
+              className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full transition-all duration-500"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -176,7 +171,7 @@ export default function DiagnosePage() {
       <main className="max-w-2xl mx-auto px-6 py-8">
         <div className="animate-fade-in">
           <div className="text-center mb-8">
-            <div className="text-6xl mb-4 emoji-bounce">{currentQuestion.icon}</div>
+            <div className="text-6xl mb-4">{currentQuestion.icon}</div>
             <h2 className="text-2xl md:text-3xl font-bold text-gray-800 leading-tight">
               {currentQuestion.question}
             </h2>
@@ -193,20 +188,21 @@ export default function DiagnosePage() {
                   <button
                     key={option.value}
                     onClick={() => handleSelect(option.value)}
-                    className={`option-btn animate-fade-in ${
-                      isSelected ? "selected" : ""
+                    className={`w-full text-left p-4 rounded-2xl border-2 transition-all ${
+                      isSelected
+                        ? "border-emerald-500 bg-emerald-50"
+                        : "border-gray-200 bg-white hover:border-gray-300"
                     }`}
-                    style={{ animationDelay: `${index * 0.1}s` }}
                   >
                     <div className="flex items-center gap-4">
                       <span className="text-2xl">{option.icon}</span>
-                      <span className="flex-1 text-left font-medium text-gray-700">
+                      <span className="flex-1 font-medium text-gray-700">
                         {option.label}
                       </span>
                       <div
                         className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
                           isSelected
-                            ? "border-green-500 bg-green-500"
+                            ? "border-emerald-500 bg-emerald-500"
                             : "border-gray-300"
                         }`}
                       >
@@ -238,21 +234,15 @@ export default function DiagnosePage() {
                 value={formData[currentQuestion.id as keyof FormData]}
                 onChange={(e) => handleTextChange(e.target.value)}
                 placeholder={currentQuestion.placeholder}
-                className="input text-lg"
+                className="w-full p-4 border-2 border-gray-200 rounded-2xl text-lg focus:outline-none focus:border-emerald-500 bg-gray-50 focus:bg-white transition-all"
                 autoFocus
               />
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
-                {currentQuestion.icon}
-              </div>
             </div>
           )}
 
           {currentQuestion.multiple && (
             <div className="mt-4 text-center">
-              <span className="inline-flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-medium">
-                <span className="w-5 h-5 bg-green-500 text-white rounded-full flex items-center justify-center text-xs">
-                  {selectedSkills.length}
-                </span>
+              <span className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full text-sm font-medium">
                 已选择 {selectedSkills.length} 项
               </span>
             </div>
@@ -265,8 +255,10 @@ export default function DiagnosePage() {
             <button
               onClick={handleSubmit}
               disabled={!canProceed()}
-              className={`w-full btn-primary text-lg ${
-                !canProceed() ? "opacity-50 cursor-not-allowed" : ""
+              className={`w-full py-4 rounded-xl text-lg font-bold transition-all ${
+                canProceed()
+                  ? "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white hover:shadow-lg"
+                  : "bg-gray-200 text-gray-400 cursor-not-allowed"
               }`}
             >
               开始诊断 🚀
@@ -275,8 +267,10 @@ export default function DiagnosePage() {
             <button
               onClick={handleNext}
               disabled={!canProceed()}
-              className={`w-full btn-primary text-lg ${
-                !canProceed() ? "opacity-50 cursor-not-allowed" : ""
+              className={`w-full py-4 rounded-xl text-lg font-bold transition-all ${
+                canProceed()
+                  ? "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white hover:shadow-lg"
+                  : "bg-gray-200 text-gray-400 cursor-not-allowed"
               }`}
             >
               下一步 →
