@@ -157,7 +157,13 @@ function ResultContent() {
           </div>
 
           <button
-            onClick={() => router.push("/")}
+            onClick={() => {
+              const params = new URLSearchParams({
+                name: selectedHustle.name,
+                steps: JSON.stringify(selectedHustle.steps),
+              });
+              router.push(`/guide?${params.toString()}`);
+            }}
             className="w-full mt-6 py-4 bg-green-500 text-white rounded-xl font-bold hover:bg-green-600 transition-colors"
           >
             我要开始做！
