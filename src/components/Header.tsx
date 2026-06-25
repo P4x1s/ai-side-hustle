@@ -53,14 +53,13 @@ export default function Header({ title, showBack = false, showUser = true }: Hea
           <div className="flex items-center gap-3">
             {showUser && user ? (
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center">
-                  <span className="text-sm font-medium text-amber-700">{user.email?.charAt(0).toUpperCase()}</span>
-                </div>
                 <button
-                  onClick={signOut}
-                  className="text-sm text-gray-500 hover:text-gray-700 hidden sm:block"
+                  onClick={() => router.push("/dashboard")}
+                  className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center hover:bg-amber-200 transition-colors"
                 >
-                  退出
+                  <span className="text-sm font-medium text-amber-700">
+                    {user.email?.charAt(0).toUpperCase()}
+                  </span>
                 </button>
               </div>
             ) : showUser ? (
