@@ -357,40 +357,92 @@ export const sideHustles: SideHustle[] = [
   },
 ];
 
-// 根据用户情况推荐副业
+// 根据用户情况推荐副业（增强版匹配算法）
 export function getRecommendations(user: {
   city: string;
+  cityType: string;
+  age: string;
+  education: string;
+  currentStatus: string;
   timePerDay: string;
+  weekend: string;
   skills: string;
+  interests: string;
+  experience: string;
   capital: string;
+  riskLevel: string;
   goal: string;
+  urgency: string;
 }): SideHustle[] {
   const scored = sideHustles.map((hustle) => {
     let score = 0;
 
-    // 资金匹配
+    // 1. 资金匹配（权重3）
     if (hustle.capital.includes(user.capital)) score += 3;
 
-    // 时间匹配
+    // 2. 时间匹配（权重3）
     if (hustle.time.includes(user.timePerDay)) score += 3;
 
-    // 技能匹配
-    const userSkills = user.skills.split(", ");
+    // 3. 技能匹配（权重2）
+    const userSkills = user.skills.split(", ").filter(Boolean);
     userSkills.forEach((skill) => {
-      if (hustle.skills.includes(skill)) score += 1;
+      if (hustle.skills.some(s => skill.includes(s) || s.includes(skill))) score += 2;
     });
 
-    // 收入目标匹配
-    const goalNum = parseInt(user.goal) || 3000;
-    const potentialNum = parseInt(hustle.potential.match(/\d+/)?.[0] || "2000");
-    if (potentialNum >= goalNum * 0.5) score += 1;
+    // 4. 兴趣匹配（权重2）
+    const userInterests = user.interests.split(", ").filter(Boolean);
+    if (hustle.category && userInterests.some(i => hustle.category.includes(i) || i.includes(hustle.category))) {
+      score += 2;
+    }
 
-    // 难度加分（简单更容易得高分）
-    if (hustle.difficulty === "简单") score += 1;
+    // 5. 收入目标匹配（权重2）
+    const goalNum = parseInt(user.goal?.split("-")[0]) || 3000;
+    const potentialMatch = hustle.potential.match(/(\d+)-(\d+)/);
+    if (potentialMatch) {
+      const minPotential = parseInt(potentialMatch[1]);
+      const maxPotential = parseInt(potentialMatch[2]);
+      if (goalNum >= minPotential && goalNum <= maxPotential) {
+        score += 3; // 完美匹配
+      } else if (goalNum <= maxPotential) {
+        score += 1; // 可能达到
+      }
+    }
+
+    // 6. 难度匹配（根据经验调整）
+    if (user.experience === "没做过") {
+      if (hustle.difficulty === "简单") score += 2;
+    } else if (user.experience === "有稳定副业") {
+      if (hustle.difficulty === "较难") score += 2;
+    } else {
+      if (hustle.difficulty === "中等") score += 1;
+    }
+
+    // 7. 城市类型匹配
+    if (user.cityType === "农村" || user.cityType === "三线及以下") {
+      // 小城市/农村更适合本地服务
+      if (hustle.category === "服务" || hustle.category === "本地") score += 2;
+    }
+
+    // 8. 当前状态匹配
+    if (user.currentStatus === "全职妈妈/爸爸") {
+      // 在家能做的副业更适合
+      if (hustle.time.includes("1-3小时") || hustle.time.includes("1小时以内")) score += 1;
+    }
+
+    // 9. 紧急程度匹配
+    if (user.urgency === "非常急" || user.urgency === "比较急") {
+      // 简单、快速上手的副业更适合
+      if (hustle.difficulty === "简单") score += 1;
+    }
+
+    // 10. 风险承受匹配
+    if (user.riskLevel === "零风险") {
+      if (hustle.capital.includes("没有")) score += 2;
+    }
 
     return { ...hustle, score };
   });
 
   scored.sort((a, b) => b.score - a.score);
-  return scored.slice(0, 3);
+  return scored.slice(0, 5); // 返回前5个推荐
 }

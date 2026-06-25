@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { getRecommendations, SideHustle } from "@/data/hustles";
+import { getRecommendations, SideHustle, sideHustles } from "@/data/hustles";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import Header from "@/components/Header";
 
@@ -11,16 +11,28 @@ function ResultContent() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [recommendations, setRecommendations] = useState<SideHustle[]>([]);
-  const [selectedHustle, setSelectedHustle] = useState<SideHustle | null>(null);
+  const [allHustles, setAllHustles] = useState<SideHustle[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>("推荐");
   const [history, setHistory] = useLocalStorage<SideHustle[]>("hustle-history", []);
 
   const formData = {
     city: searchParams.get("city") || "",
+    cityType: searchParams.get("cityType") || "",
+    age: searchParams.get("age") || "",
+    education: searchParams.get("education") || "",
+    currentStatus: searchParams.get("currentStatus") || "",
     timePerDay: searchParams.get("timePerDay") || "",
+    weekend: searchParams.get("weekend") || "",
     skills: searchParams.get("skills") || "",
+    interests: searchParams.get("interests") || "",
+    experience: searchParams.get("experience") || "",
     capital: searchParams.get("capital") || "",
+    riskLevel: searchParams.get("riskLevel") || "",
     goal: searchParams.get("goal") || "",
+    urgency: searchParams.get("urgency") || "",
   };
+
+  const categories = ["推荐", ...new Set(sideHustles.map((h) => h.category))];
 
   useEffect(() => {
     generateRecommendations();
@@ -31,14 +43,13 @@ function ResultContent() {
     await new Promise((resolve) => setTimeout(resolve, 1200));
     const recs = getRecommendations(formData);
     setRecommendations(recs);
+    setAllHustles(sideHustles);
     setLoading(false);
   };
 
-  const handleSelect = (hustle: SideHustle) => {
-    setSelectedHustle(hustle);
-    if (!history.find((h) => h.id === hustle.id)) {
-      setHistory([...history, hustle]);
-    }
+  const getFilteredHustles = (): SideHustle[] => {
+    if (selectedCategory === "推荐") return recommendations;
+    return allHustles.filter((h) => h.category === selectedCategory);
   };
 
   if (loading) {
@@ -58,123 +69,110 @@ function ResultContent() {
     );
   }
 
-  if (selectedHustle) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <Header title={selectedHustle.name} showBack={true} />
-        <main className="max-w-2xl mx-auto px-4 py-6">
-          <div className="bg-white rounded-2xl p-6 shadow-sm mb-6">
-            <h2 className="font-bold text-gray-900 mb-4">操作步骤</h2>
-            <div className="space-y-4">
-              {selectedHustle.steps.map((step, index) => (
-                <div key={index} className="flex gap-4">
-                  <div className="w-8 h-8 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
-                    {index + 1}
-                  </div>
-                  <div className="flex-1 p-3 bg-gray-50 rounded-lg text-gray-700 text-sm">
-                    {step}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="bg-amber-50 rounded-2xl p-5 border border-amber-100 mb-6">
-            <div className="flex items-start gap-3">
-              <span className="text-xl">💡</span>
-              <div>
-                <div className="font-bold text-amber-900 text-sm mb-1">小贴士</div>
-                <div className="text-amber-800 text-sm">{selectedHustle.tips}</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4 mb-6">
-            <div className="bg-white rounded-xl p-4 shadow-sm text-center">
-              <div className="text-xs text-gray-500 mb-1">难度</div>
-              <span className={`text-sm font-medium ${
-                selectedHustle.difficulty === "简单" ? "text-emerald-600" :
-                selectedHustle.difficulty === "中等" ? "text-amber-600" : "text-red-600"
-              }`}>
-                {selectedHustle.difficulty}
-              </span>
-            </div>
-            <div className="bg-white rounded-xl p-4 shadow-sm text-center">
-              <div className="text-xs text-gray-500 mb-1">预期收入</div>
-              <div className="text-sm font-medium text-amber-600">{selectedHustle.potential}</div>
-            </div>
-          </div>
-
-          <button
-            onClick={() => {
-              const params = new URLSearchParams({ name: selectedHustle.name });
-              router.push(`/guide?${params.toString()}`);
-            }}
-            className="w-full py-4 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-xl font-bold hover:shadow-lg transition-all"
-          >
-            开始执行 →
-          </button>
-        </main>
-      </div>
-    );
-  }
+  const filteredHustles = getFilteredHustles();
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header title="推荐结果" showBack={true} />
+
       <div className="max-w-2xl mx-auto px-4 py-6">
+        {/* User Info */}
         <div className="bg-white rounded-2xl p-4 shadow-sm mb-6">
           <div className="text-xs text-gray-500 mb-2">你的情况</div>
           <div className="flex flex-wrap gap-2 text-sm">
-            <span className="px-3 py-1 bg-gray-100 rounded-full text-gray-600">📍 {formData.city}</span>
-            <span className="px-3 py-1 bg-gray-100 rounded-full text-gray-600">⏰ {formData.timePerDay}</span>
-            <span className="px-3 py-1 bg-gray-100 rounded-full text-gray-600">💰 {formData.capital}</span>
+            {formData.city && <span className="px-3 py-1 bg-gray-100 rounded-full text-gray-600">📍 {formData.city}</span>}
+            {formData.timePerDay && <span className="px-3 py-1 bg-gray-100 rounded-full text-gray-600">⏰ {formData.timePerDay}</span>}
+            {formData.capital && <span className="px-3 py-1 bg-gray-100 rounded-full text-gray-600">💰 {formData.capital}</span>}
+            {formData.goal && <span className="px-3 py-1 bg-gray-100 rounded-full text-gray-600">🎯 {formData.goal}</span>}
           </div>
         </div>
 
-        <div className="space-y-4">
-          {recommendations.map((hustle, index) => (
-            <div
-              key={hustle.id}
-              onClick={() => handleSelect(hustle)}
-              className="bg-white rounded-2xl p-5 shadow-sm cursor-pointer card-hover"
+        {/* Category Filter */}
+        <div className="flex gap-2 overflow-x-auto pb-2 mb-6">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
+                selectedCategory === cat
+                  ? "bg-amber-500 text-white"
+                  : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50"
+              }`}
             >
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <span className="text-xl">
-                    {index === 0 ? "🥇" : index === 1 ? "🥈" : "🥉"}
-                  </span>
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-bold text-gray-900 mb-1">{hustle.name}</h3>
-                  <p className="text-sm text-gray-500 mb-3">{hustle.description}</p>
-                  <div className="flex gap-2">
-                    <span className={`text-xs px-2 py-1 rounded-full ${
-                      hustle.difficulty === "简单" ? "bg-emerald-100 text-emerald-700" :
-                      hustle.difficulty === "中等" ? "bg-amber-100 text-amber-700" :
-                      "bg-red-100 text-red-700"
-                    }`}>
-                      {hustle.difficulty}
-                    </span>
-                    <span className="text-xs px-2 py-1 rounded-full bg-amber-100 text-amber-700">
-                      {hustle.potential}
-                    </span>
-                  </div>
-                </div>
-                <span className="text-gray-400">→</span>
-              </div>
-            </div>
+              {cat}
+            </button>
           ))}
         </div>
 
-        {history.length > 0 && (
+        {/* Recommendations */}
+        <div className="space-y-4">
+          {filteredHustles.length === 0 ? (
+            <div className="bg-white rounded-2xl p-8 shadow-sm text-center">
+              <div className="text-4xl mb-4">🔍</div>
+              <h3 className="font-bold text-gray-900 mb-2">暂无推荐</h3>
+              <p className="text-gray-500 text-sm">该分类下暂无副业方案</p>
+            </div>
+          ) : (
+            filteredHustles.map((hustle, index) => (
+              <div
+                key={hustle.id}
+                onClick={() => router.push(`/hustle?id=${hustle.id}`)}
+                className="bg-white rounded-2xl p-5 shadow-sm cursor-pointer card-hover"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <span className="text-xl">
+                      {selectedCategory === "推荐" && index < 3
+                        ? index === 0
+                          ? "🥇"
+                          : index === 1
+                          ? "🥈"
+                          : "🥉"
+                        : "💰"}
+                    </span>
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="font-bold text-gray-900">{hustle.name}</h3>
+                      {selectedCategory === "推荐" && index < 3 && (
+                        <span className="text-xs px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full">
+                          推荐
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-sm text-gray-500 mb-3">{hustle.description}</p>
+                    <div className="flex gap-2">
+                      <span className={`text-xs px-2 py-1 rounded-full ${
+                        hustle.difficulty === "简单" ? "bg-green-100 text-green-700" :
+                        hustle.difficulty === "中等" ? "bg-amber-100 text-amber-700" :
+                        "bg-red-100 text-red-700"
+                      }`}>
+                        {hustle.difficulty}
+                      </span>
+                      <span className="text-xs px-2 py-1 rounded-full bg-amber-100 text-amber-700">
+                        {hustle.potential}
+                      </span>
+                      <span className="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-600">
+                        {hustle.category}
+                      </span>
+                    </div>
+                  </div>
+                  <span className="text-gray-400">→</span>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* History */}
+        {history.length > 0 && selectedCategory === "推荐" && (
           <div className="mt-8">
             <h3 className="font-bold text-gray-900 mb-3">历史记录</h3>
             <div className="space-y-2">
               {history.slice(0, 3).map((hustle) => (
                 <div
                   key={hustle.id}
-                  onClick={() => handleSelect(hustle)}
+                  onClick={() => router.push(`/hustle?id=${hustle.id}`)}
                   className="bg-white rounded-xl p-4 shadow-sm cursor-pointer card-hover flex items-center justify-between"
                 >
                   <div>

@@ -108,21 +108,33 @@ export default function Home() {
           <div className="text-center mb-16">
             <span className="text-amber-600 font-semibold text-sm">副业类型</span>
             <h2 className="text-3xl font-bold text-gray-900 mt-2">你能找到什么</h2>
+            <p className="text-gray-500 mt-2">20+种副业方案，总有一个适合你</p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-4">
             {[
-              { icon: "🛒", title: "电商类", desc: "闲鱼卖货、社区团购" },
-              { icon: "📱", title: "内容创作", desc: "短视频、自媒体" },
-              { icon: "🛠️", title: "技能服务", desc: "设计、翻译、教学" },
-              { icon: "🏠", title: "本地服务", desc: "烘焙、手工、代办" },
+              { icon: "🛒", title: "电商", count: "5种" },
+              { icon: "📱", title: "内容创作", count: "6种" },
+              { icon: "🛠️", title: "技能服务", count: "4种" },
+              { icon: "🏠", title: "本地服务", count: "3种" },
+              { icon: "📚", title: "教育培训", count: "3种" },
+              { icon: "🎮", title: "其他", count: "3种" },
             ].map((item, i) => (
-              <div key={i} className="bg-white p-6 rounded-2xl border border-gray-100 card-hover">
-                <div className="text-4xl mb-4">{item.icon}</div>
-                <h3 className="font-bold text-gray-900 mb-1">{item.title}</h3>
-                <p className="text-sm text-gray-500">{item.desc}</p>
+              <div key={i} className="bg-white p-5 rounded-xl border border-gray-100 card-hover text-center">
+                <div className="text-3xl mb-2">{item.icon}</div>
+                <h3 className="font-bold text-gray-900 text-sm">{item.title}</h3>
+                <p className="text-xs text-amber-600 mt-1">{item.count}</p>
               </div>
             ))}
+          </div>
+
+          <div className="text-center mt-8">
+            <button
+              onClick={() => router.push("/diagnose")}
+              className="px-6 py-3 bg-amber-500 text-white rounded-xl font-medium hover:bg-amber-600 transition-colors"
+            >
+              查看全部副业 →
+            </button>
           </div>
         </div>
       </section>
