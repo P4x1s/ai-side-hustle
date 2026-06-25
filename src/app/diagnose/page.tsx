@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Header from "@/components/Header";
 
 interface FormData {
   city: string;
@@ -134,30 +135,19 @@ export default function DiagnosePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-100">
-        <div className="max-w-2xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between mb-4">
-            <button
-              onClick={handleBack}
-              className={`flex items-center gap-2 text-gray-500 hover:text-gray-700 transition-colors ${
-                currentStep === 0 ? "invisible" : ""
-              }`}
-            >
-              <span>←</span>
-              <span className="text-sm">返回</span>
-            </button>
-            
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">{currentQuestion.icon}</span>
-              <span className="text-sm font-medium text-gray-500">
-                {currentStep + 1} / {questions.length}
-              </span>
-            </div>
-            
-            <div className="w-16"></div>
+      <Header title="自我诊断" showBack={true} />
+
+      {/* Progress */}
+      <div className="bg-white border-b border-gray-100 px-4 py-3">
+        <div className="max-w-2xl mx-auto">
+          <div className="flex items-center justify-between text-sm mb-2">
+            <span className="text-gray-600">
+              {currentStep === 0 ? "准备开始" : `第 ${currentStep} 题`}
+            </span>
+            <span className="font-medium text-emerald-600">
+              {currentStep + 1} / {questions.length}
+            </span>
           </div>
-          
           <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
             <div
               className="h-full bg-emerald-500 rounded-full transition-all duration-500"
@@ -165,7 +155,7 @@ export default function DiagnosePage() {
             />
           </div>
         </div>
-      </header>
+      </div>
 
       {/* Question */}
       <main className="max-w-2xl mx-auto px-4 py-8">
@@ -179,7 +169,7 @@ export default function DiagnosePage() {
 
           {currentQuestion.options ? (
             <div className="space-y-3">
-              {currentQuestion.options.map((option, index) => {
+              {currentQuestion.options.map((option) => {
                 const isSelected = currentQuestion.multiple
                   ? selectedSkills.includes(option.value)
                   : formData[currentQuestion.id as keyof FormData] === option.value;
@@ -250,12 +240,20 @@ export default function DiagnosePage() {
         </div>
 
         {/* Navigation */}
-        <div className="mt-10">
+        <div className="mt-10 flex gap-4">
+          {currentStep > 0 && (
+            <button
+              onClick={handleBack}
+              className="px-6 py-4 bg-gray-100 text-gray-600 rounded-xl font-bold hover:bg-gray-200 transition-colors"
+            >
+              上一步
+            </button>
+          )}
           {isLastStep ? (
             <button
               onClick={handleSubmit}
               disabled={!canProceed()}
-              className={`w-full py-4 rounded-xl text-lg font-bold transition-all ${
+              className={`flex-1 py-4 rounded-xl text-lg font-bold transition-all ${
                 canProceed()
                   ? "bg-emerald-500 text-white hover:bg-emerald-600"
                   : "bg-gray-200 text-gray-400 cursor-not-allowed"
@@ -267,7 +265,7 @@ export default function DiagnosePage() {
             <button
               onClick={handleNext}
               disabled={!canProceed()}
-              className={`w-full py-4 rounded-xl text-lg font-bold transition-all ${
+              className={`flex-1 py-4 rounded-xl text-lg font-bold transition-all ${
                 canProceed()
                   ? "bg-emerald-500 text-white hover:bg-emerald-600"
                   : "bg-gray-200 text-gray-400 cursor-not-allowed"

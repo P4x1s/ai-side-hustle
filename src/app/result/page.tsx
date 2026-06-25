@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { getRecommendations, SideHustle } from "@/data/hustles";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import Header from "@/components/Header";
 
 function ResultContent() {
   const searchParams = useSearchParams();
@@ -43,17 +44,20 @@ function ResultContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center animate-fade-in">
-          <div className="w-20 h-20 mx-auto mb-6 bg-emerald-100 rounded-full flex items-center justify-center">
-            <span className="text-4xl">🤖</span>
-          </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-3">AI正在分析...</h2>
-          <p className="text-gray-500">正在为你量身定制副业方案</p>
-          <div className="mt-8 flex justify-center gap-1">
-            <div className="w-3 h-3 bg-emerald-500 rounded-full animate-bounce" />
-            <div className="w-3 h-3 bg-emerald-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
-            <div className="w-3 h-3 bg-emerald-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+      <div className="min-h-screen bg-gray-50">
+        <Header title="AI分析中" showBack={true} />
+        <div className="flex items-center justify-center py-20">
+          <div className="text-center animate-fade-in">
+            <div className="w-20 h-20 mx-auto mb-6 bg-emerald-100 rounded-full flex items-center justify-center">
+              <span className="text-4xl">🤖</span>
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">AI正在分析...</h2>
+            <p className="text-gray-500">正在为你量身定制副业方案</p>
+            <div className="mt-8 flex justify-center gap-1">
+              <div className="w-3 h-3 bg-emerald-500 rounded-full animate-bounce" />
+              <div className="w-3 h-3 bg-emerald-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
+              <div className="w-3 h-3 bg-emerald-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+            </div>
           </div>
         </div>
       </div>
@@ -63,20 +67,7 @@ function ResultContent() {
   if (selectedHustle) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <header className="bg-white border-b border-gray-100">
-          <div className="max-w-2xl mx-auto px-4 py-4 flex items-center gap-4">
-            <button
-              onClick={() => setSelectedHustle(null)}
-              className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors"
-            >
-              ←
-            </button>
-            <div className="flex-1">
-              <h1 className="text-lg font-bold text-gray-900">{selectedHustle.name}</h1>
-              <p className="text-sm text-gray-500">跟着步骤做，轻松赚钱</p>
-            </div>
-          </div>
-        </header>
+        <Header title={selectedHustle.name} showBack={true} />
 
         <main className="max-w-2xl mx-auto px-4 py-6">
           {/* Steps */}
@@ -159,12 +150,7 @@ function ResultContent() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-100">
-        <div className="max-w-2xl mx-auto px-4 py-4">
-          <h1 className="text-xl font-bold text-gray-900">你的副业方案</h1>
-          <p className="text-sm text-gray-500">基于你的情况，AI为你推荐</p>
-        </div>
-      </header>
+      <Header title="副业方案" showBack={true} />
 
       <div className="max-w-2xl mx-auto px-4 py-6">
         {/* User Info */}
@@ -245,7 +231,7 @@ function ResultContent() {
 
         {/* Reset */}
         <button
-          onClick={() => router.push("/")}
+          onClick={() => router.push("/diagnose")}
           className="w-full mt-8 py-4 bg-gray-100 text-gray-600 rounded-xl font-bold hover:bg-gray-200 transition-colors"
         >
           重新诊断
@@ -259,12 +245,15 @@ export default function ResultPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-          <div className="text-center">
-            <div className="w-20 h-20 mx-auto mb-6 bg-emerald-100 rounded-full flex items-center justify-center">
-              <span className="text-4xl">🤖</span>
+        <div className="min-h-screen bg-gray-50">
+          <Header title="加载中" showBack={true} />
+          <div className="flex items-center justify-center py-20">
+            <div className="text-center">
+              <div className="w-20 h-20 mx-auto mb-6 bg-emerald-100 rounded-full flex items-center justify-center">
+                <span className="text-4xl">🤖</span>
+              </div>
+              <h2 className="text-xl font-bold text-gray-900 mb-2">加载中...</h2>
             </div>
-            <h2 className="text-xl font-bold text-gray-900 mb-2">加载中...</h2>
           </div>
         </div>
       }

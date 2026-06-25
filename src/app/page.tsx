@@ -2,57 +2,15 @@
 
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import Header from "@/components/Header";
 
 export default function Home() {
   const router = useRouter();
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-white border-b border-gray-100">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">💰</span>
-              <span className="text-lg font-bold text-gray-900">AI副业教练</span>
-            </div>
-            
-            <div className="hidden md:flex items-center gap-8">
-              <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">功能介绍</a>
-              <a href="#how-it-works" className="text-gray-600 hover:text-gray-900 transition-colors">使用流程</a>
-              <a href="#testimonials" className="text-gray-600 hover:text-gray-900 transition-colors">用户评价</a>
-            </div>
-
-            <div className="flex items-center gap-3">
-              {user ? (
-                <div className="flex items-center gap-3">
-                  <span className="text-sm text-gray-500 hidden sm:block">{user.email}</span>
-                  <button
-                    onClick={signOut}
-                    className="text-sm text-gray-500 hover:text-gray-700"
-                  >
-                    退出
-                  </button>
-                </div>
-              ) : (
-                <button
-                  onClick={() => router.push("/login")}
-                  className="px-4 py-2 text-sm font-medium text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
-                >
-                  登录
-                </button>
-              )}
-              <button
-                onClick={() => router.push("/diagnose")}
-                className="px-5 py-2.5 bg-emerald-500 text-white text-sm font-medium rounded-lg hover:bg-emerald-600 transition-colors"
-              >
-                开始测试
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Header />
 
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-600">

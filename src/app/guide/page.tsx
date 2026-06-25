@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { sideHustles } from "@/data/hustles";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import Header from "@/components/Header";
 
 interface Message {
   role: "ai" | "user";
@@ -110,40 +111,37 @@ function GuideContent() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
-      <header className="bg-white border-b border-gray-100">
-        <div className="max-w-2xl mx-auto px-4 py-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center">
-              <span className="text-xl">🤖</span>
-            </div>
-            <div className="flex-1">
-              <h1 className="font-bold text-gray-900">AI副业教练</h1>
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-                <span className="text-xs text-emerald-600">在线</span>
+      <header className="bg-white border-b border-gray-100 sticky top-0 z-50">
+        <div className="max-w-2xl mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center">
+                <span className="text-xl">🤖</span>
               </div>
+              <div>
+                <h1 className="font-bold text-gray-900">AI副业教练</h1>
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                  <span className="text-xs text-emerald-600">在线</span>
+                </div>
+              </div>
+            </div>
+            <div className="text-sm font-medium text-emerald-600">
+              {currentStep + 1} / {steps.length}
+            </div>
+          </div>
+          
+          {/* Progress */}
+          <div className="mt-3">
+            <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-emerald-500 rounded-full transition-all duration-500"
+                style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
+              />
             </div>
           </div>
         </div>
       </header>
-
-      {/* Progress */}
-      <div className="bg-white border-b border-gray-100 px-4 py-3">
-        <div className="max-w-2xl mx-auto">
-          <div className="flex items-center justify-between text-sm mb-2">
-            <span className="text-gray-600">📍 {hustleName}</span>
-            <span className="font-bold text-emerald-600">
-              {currentStep + 1} / {steps.length}
-            </span>
-          </div>
-          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-emerald-500 rounded-full transition-all duration-500"
-              style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
-            />
-          </div>
-        </div>
-      </div>
 
       {/* Messages */}
       <main className="flex-1 overflow-auto p-4">
@@ -250,12 +248,15 @@ export default function GuidePage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-          <div className="text-center">
-            <div className="w-20 h-20 mx-auto mb-6 bg-emerald-100 rounded-full flex items-center justify-center">
-              <span className="text-4xl">🤖</span>
+        <div className="min-h-screen bg-gray-50">
+          <Header title="加载中" showBack={true} />
+          <div className="flex items-center justify-center py-20">
+            <div className="text-center">
+              <div className="w-20 h-20 mx-auto mb-6 bg-emerald-100 rounded-full flex items-center justify-center">
+                <span className="text-4xl">🤖</span>
+              </div>
+              <h2 className="text-xl font-bold text-gray-900 mb-2">加载中...</h2>
             </div>
-            <h2 className="text-xl font-bold text-gray-900 mb-2">加载中...</h2>
           </div>
         </div>
       }
