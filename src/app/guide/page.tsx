@@ -86,16 +86,47 @@ function GuideContent() {
       const nextStep = currentStep + 1;
       if (nextStep < steps.length) {
         setCurrentStep(nextStep);
-        aiResponse = `太棒了！👏 第${currentStep + 1}步完成！\n\n下一步（第${nextStep + 1}步）：\n\n**${steps[nextStep]}**\n\n完成后继续点"完成了"。`;
+        const tips = [
+          "加油！每完成一步，你就离目标更近了。",
+          "做得好！保持这个节奏，很快就能看到成果。",
+          "太棒了！继续加油，你已经在正确的道路上了。",
+          "很好！记住，坚持是成功的关键。",
+        ];
+        const randomTip = tips[Math.floor(Math.random() * tips.length)];
+        aiResponse = `太棒了！👏 第${currentStep + 1}步完成！\n\n${randomTip}\n\n下一步（第${nextStep + 1}步）：\n\n**${steps[nextStep]}**\n\n完成后继续点"完成了"。`;
       } else {
-        aiResponse = `🎉 恭喜你！所有步骤都完成了！\n\n你现在可以开始赚钱了！\n\n记住：\n• 坚持每天做一点\n• 遇到问题随时问我\n• 赚到钱了告诉我\n\n祝你早日实现目标！💰`;
+        aiResponse = `🎉 恭喜你！所有步骤都完成了！\n\n你已经迈出了最重要的一步。现在：\n\n1️⃣ **开始执行** - 按照学到的方法去做\n2️⃣ **记录数据** - 记录每天的收入和支出\n3️⃣ **持续优化** - 根据反馈调整策略\n\n记住：\n• 坚持每天做一点，积少成多\n• 遇到问题随时问我\n• 赚到钱了一定要告诉我！\n\n祝你早日实现目标！💰`;
       }
     } else if (text.includes("怎么做") || text.includes("详细") || text.includes("不会")) {
-      aiResponse = `关于这一步，我来帮你：\n\n**${steps[currentStep]}**\n\n具体操作：\n1. 不要着急，慢慢来\n2. 按照提示一步步操作\n3. 遇到困难截图发给我\n\n有什么具体问题吗？`;
-    } else if (text.includes("赚了") || text.includes("收入")) {
-      aiResponse = `太好了！💰 有了收入说明方向对了！\n\n建议：\n1. 记录每天赚了多少\n2. 总结什么方法最有效\n3. 继续坚持\n\n下一步：${currentStep + 1 < steps.length ? steps[currentStep + 1] : "你已经完成所有步骤了！"}`;
+      const stepDetails: Record<string, string> = {
+        "闲鱼": "打开闲鱼APP -> 点击'发布' -> 选择'卖闲置' -> 拍照或从相册选择商品图片 -> 填写商品描述和价格 -> 选择包邮 -> 发布",
+        "美团": "打开微信 -> 搜索'美团优选' -> 点击'成为团长' -> 填写个人信息和小区地址 -> 等待审核（通常1-2天） -> 审核通过后开始推广",
+        "抖音": "打开抖音APP -> 点击'+'发布视频 -> 选择相册中的视频 -> 添加标题和话题标签 -> 点击发布",
+        "小红书": "打开小红书APP -> 点击'+'发布笔记 -> 选择图片或视频 -> 撰写标题和正文 -> 添加话题标签 -> 发布",
+      };
+      
+      let detail = "";
+      for (const [key, value] of Object.entries(stepDetails)) {
+        if (steps[currentStep]?.includes(key)) {
+          detail = value;
+          break;
+        }
+      }
+      
+      aiResponse = `关于这一步，我来详细帮你：\n\n**${steps[currentStep]}**\n\n${detail || "具体操作：\n1. 不要着急，慢慢来\n2. 按照提示一步步操作\n3. 遇到困难随时问我\n\n你可以告诉我具体哪里不会，我帮你解决。"}`;
+    } else if (text.includes("赚了") || text.includes("收入") || text.includes("钱")) {
+      aiResponse = `太好了！💰 有了收入说明方向对了！\n\n接下来建议：\n\n1️⃣ **记录数据**\n   - 今天赚了多少？\n   - 成本是多少？\n   - 净利润是多少？\n\n2️⃣ **分析优化**\n   - 什么方法效果最好？\n   - 什么时间段收入最高？\n   - 如何提高效率？\n\n3️⃣ **扩大规模**\n   - 能否增加投入？\n   - 能否拓展渠道？\n   - 能否开发新产品？\n\n4️⃣ **建立习惯**\n   - 每天固定时间做\n   - 保持稳定的输出\n   - 不要三天打鱼两天晒网\n\n你现在赚了多少？我帮你分析下一步怎么做。`;
+    } else if (text.includes("多久") || text.includes("时间")) {
+      aiResponse = `关于时间，给你一些参考：\n\n**起步期（1-2周）**\n• 熟悉流程，学习方法\n• 这个阶段可能还没收入\n• 重要的是打好基础\n\n**成长期（1-3个月）**\n• 开始有稳定收入\n• 逐步优化方法\n• 收入可能在1000-3000元\n\n**稳定期（3-6个月）**\n• 收入稳定增长\n• 建立了客户群\n• 月收入可能达到3000-5000元\n\n**爆发期（6个月以上）**\n• 收入大幅提升\n• 可能拓展多个渠道\n• 月收入可能达到5000-10000元\n\n记住：每个人的情况不同，关键是坚持。`;
+    } else if (text.includes("坚持") || text.includes("放弃") || text.includes("难")) {
+      aiResponse = `我理解你的感受。坚持确实不容易，但请记住：\n\n💪 **你不是一个人**\n很多人在开始时都会遇到困难，这是正常的。\n\n🎯 **设定小目标**\n不要想着一步登天，先设定小目标：\n• 今天赚到第一块钱\n• 本周完成5单\n• 本月收入达到1000元\n\n📊 **记录进步**\n每天记录你的进步，哪怕是小小的进步。\n回头看看，你会发现自己已经走了很远。\n\n🤝 **寻求支持**\n遇到困难可以问我，我会帮你解决。\n也可以找志同道合的朋友一起做。\n\n你现在遇到什么具体困难？告诉我，我帮你分析。`;
     } else {
-      aiResponse = `收到！\n\n当前进度：第${currentStep + 1}步 / 共${steps.length}步\n\n当前任务：**${steps[currentStep]}**\n\n完成后点"完成了"，我教你下一步。`;
+      const responses = [
+        `收到！我来帮你。\n\n当前进度：第${currentStep + 1}步 / 共${steps.length}步\n\n当前任务：**${steps[currentStep]}**\n\n有什么具体问题吗？我可以：\n• 详细解释这一步怎么做\n• 帮你解决遇到的困难\n• 给你更多的建议和技巧`,
+        `好的，我来帮你。\n\n你现在在做：**${steps[currentStep]}**\n\n如果遇到困难，可以告诉我具体哪里不会。\n如果完成了，点"完成了"进入下一步。\n\n我会全程陪伴你，直到你成功！`,
+        `明白了。\n\n当前进度：${currentStep + 1}/${steps.length}\n\n**${steps[currentStep]}**\n\n有什么我可以帮你的吗？`,
+      ];
+      aiResponse = responses[Math.floor(Math.random() * responses.length)];
     }
 
     const aiMessage: Message = {
