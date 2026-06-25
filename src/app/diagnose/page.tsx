@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 
@@ -220,24 +220,38 @@ export default function DiagnosePage() {
     urgency: "",
   });
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  const [currentMultiField, setCurrentMultiField] = useState<string>("");
 
   const currentQuestion = questions[currentStep];
   const progress = ((currentStep + 1) / questions.length) * 100;
 
+  // Reset selectedSkills when switching to a new multiple-choice question
+  const resetMultiSelection = () => {
+    if (currentQuestion.multiple && currentQuestion.id !== currentMultiField) {
+      setSelectedSkills([]);
+      setCurrentMultiField(currentQuestion.id);
+      setFormData({ ...formData, [currentQuestion.id]: "" });
+    }
+  };
+
   const handleSelect = (value: string) => {
     if (currentQuestion.multiple) {
       const maxSelect = currentQuestion.maxSelect || 99;
+      let newSelected: string[];
+      
       if (selectedSkills.includes(value)) {
-        setSelectedSkills(selectedSkills.filter((s) => s !== value));
+        newSelected = selectedSkills.filter((s) => s !== value);
       } else if (selectedSkills.length < maxSelect) {
-        setSelectedSkills([...selectedSkills, value]);
+        newSelected = [...selectedSkills, value];
+      } else {
+        return; // Already at max
       }
-      setFormData({ ...formData, [currentQuestion.id]: selectedSkills.join(", ") });
+      
+      setSelectedSkills(newSelected);
+      setFormData({ ...formData, [currentQuestion.id]: newSelected.join(", ") });
     } else {
       setFormData({ ...formData, [currentQuestion.id]: value });
-      if (currentStep < questions.length - 1) {
-        setTimeout(() => setCurrentStep(currentStep + 1), 300);
-      }
+      // Don't auto-advance, let user click "next"
     }
   };
 
@@ -256,6 +270,21 @@ export default function DiagnosePage() {
       setCurrentStep(currentStep - 1);
     }
   };
+
+  // Reset multi-selection when step changes
+  useEffect(() => {
+    const q = questions[currentStep];
+    if (q.multiple) {
+      // Restore saved values if any
+      const saved = formData[q.id as keyof FormData];
+      if (saved) {
+        setSelectedSkills(saved.split(", ").filter(Boolean));
+      } else {
+        setSelectedSkills([]);
+      }
+      setCurrentMultiField(q.id);
+    }
+  }, [currentStep]);
 
   const handleSubmit = () => {
     const params = new URLSearchParams({
