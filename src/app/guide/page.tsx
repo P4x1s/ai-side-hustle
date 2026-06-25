@@ -110,14 +110,14 @@ function GuideContent() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
-      <header className="bg-white/95 backdrop-blur-sm sticky top-0 z-10 border-b border-gray-100">
-        <div className="max-w-2xl mx-auto px-6 py-4">
+      <header className="bg-white border-b border-gray-100">
+        <div className="max-w-2xl mx-auto px-4 py-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-sm">
-              <span className="text-2xl">🤖</span>
+            <div className="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center">
+              <span className="text-xl">🤖</span>
             </div>
-            <div>
-              <h1 className="font-bold text-gray-800">AI副业教练</h1>
+            <div className="flex-1">
+              <h1 className="font-bold text-gray-900">AI副业教练</h1>
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
                 <span className="text-xs text-emerald-600">在线</span>
@@ -128,7 +128,7 @@ function GuideContent() {
       </header>
 
       {/* Progress */}
-      <div className="bg-white border-b border-gray-100 px-6 py-3">
+      <div className="bg-white border-b border-gray-100 px-4 py-3">
         <div className="max-w-2xl mx-auto">
           <div className="flex items-center justify-between text-sm mb-2">
             <span className="text-gray-600">📍 {hustleName}</span>
@@ -138,7 +138,7 @@ function GuideContent() {
           </div>
           <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full transition-all duration-500"
+              className="h-full bg-emerald-500 rounded-full transition-all duration-500"
               style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
             />
           </div>
@@ -151,17 +151,17 @@ function GuideContent() {
           {messages.map((msg, index) => (
             <div
               key={index}
-              className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} animate-fade-in`}
+              className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} animate-slide-up`}
             >
               {msg.role === "ai" && (
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center mr-2 flex-shrink-0 mt-1">
+                <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center mr-2 flex-shrink-0 mt-1">
                   <span className="text-sm">🤖</span>
                 </div>
               )}
               <div
                 className={`max-w-[85%] rounded-2xl p-4 text-sm leading-relaxed ${
                   msg.role === "user"
-                    ? "bg-gradient-to-br from-emerald-500 to-emerald-600 text-white rounded-br-md"
+                    ? "bg-emerald-500 text-white rounded-br-md"
                     : "bg-white text-gray-800 rounded-bl-md shadow-sm"
                 }`}
               >
@@ -183,7 +183,7 @@ function GuideContent() {
 
           {isLoading && (
             <div className="flex justify-start animate-fade-in">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center mr-2 flex-shrink-0">
+              <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center mr-2 flex-shrink-0">
                 <span className="text-sm">🤖</span>
               </div>
               <div className="bg-white rounded-2xl rounded-bl-md p-4 shadow-sm">
@@ -207,7 +207,7 @@ function GuideContent() {
               <button
                 key={reply}
                 onClick={() => handleSend(reply)}
-                className="px-4 py-2 rounded-full bg-white border border-gray-200 text-sm text-gray-600 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-600 transition-all whitespace-nowrap"
+                className="px-4 py-2 rounded-full bg-gray-100 text-sm text-gray-600 hover:bg-emerald-100 hover:text-emerald-600 transition-colors whitespace-nowrap"
               >
                 {reply}
               </button>
@@ -230,9 +230,9 @@ function GuideContent() {
           <button
             onClick={() => handleSend()}
             disabled={!input.trim() || isLoading}
-            className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${
+            className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${
               input.trim() && !isLoading
-                ? "bg-emerald-500 text-white hover:bg-emerald-600 shadow-sm"
+                ? "bg-emerald-500 text-white hover:bg-emerald-600"
                 : "bg-gray-200 text-gray-400"
             }`}
           >
@@ -252,8 +252,10 @@ export default function GuidePage() {
       fallback={
         <div className="min-h-screen bg-gray-50 flex items-center justify-center">
           <div className="text-center">
-            <div className="text-7xl mb-6">🤖</div>
-            <h2 className="text-xl font-bold text-gray-800 mb-2">加载中...</h2>
+            <div className="w-20 h-20 mx-auto mb-6 bg-emerald-100 rounded-full flex items-center justify-center">
+              <span className="text-4xl">🤖</span>
+            </div>
+            <h2 className="text-xl font-bold text-gray-900 mb-2">加载中...</h2>
           </div>
         </div>
       }
