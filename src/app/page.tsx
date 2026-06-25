@@ -1,12 +1,41 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Home() {
   const router = useRouter();
+  const { user, signOut } = useAuth();
 
   return (
     <div className="min-h-screen">
+      {/* User Status Bar */}
+      <div className="bg-white border-b border-gray-100 px-6 py-3">
+        <div className="max-w-4xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-xl">💰</span>
+            <span className="font-bold text-gray-800">AI副业教练</span>
+          </div>
+          {user ? (
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-gray-500">{user.email}</span>
+              <button
+                onClick={signOut}
+                className="text-sm text-gray-500 hover:text-gray-700"
+              >
+                退出
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => router.push("/login")}
+              className="px-4 py-2 text-sm font-medium text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
+            >
+              登录 / 注册
+            </button>
+          )}
+        </div>
+      </div>
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-emerald-500 to-emerald-700 py-20 px-6 text-center">
         <div className="max-w-2xl mx-auto">

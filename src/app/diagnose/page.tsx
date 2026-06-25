@@ -144,7 +144,7 @@ export default function DiagnosePage() {
                 currentStep === 0 ? "invisible" : ""
               }`}
             >
-              <span>←</span>
+              <span className="text-lg">←</span>
               <span className="text-sm">返回</span>
             </button>
             
@@ -188,11 +188,12 @@ export default function DiagnosePage() {
                   <button
                     key={option.value}
                     onClick={() => handleSelect(option.value)}
-                    className={`w-full text-left p-4 rounded-2xl border-2 transition-all ${
+                    className={`w-full text-left p-4 border-2 rounded-2xl bg-white cursor-pointer transition-all ${
                       isSelected
                         ? "border-emerald-500 bg-emerald-50"
-                        : "border-gray-200 bg-white hover:border-gray-300"
+                        : "border-gray-200 hover:border-emerald-300 hover:bg-emerald-50"
                     }`}
+                    style={{ animationDelay: `${index * 0.1}s` }}
                   >
                     <div className="flex items-center gap-4">
                       <span className="text-2xl">{option.icon}</span>
@@ -234,15 +235,21 @@ export default function DiagnosePage() {
                 value={formData[currentQuestion.id as keyof FormData]}
                 onChange={(e) => handleTextChange(e.target.value)}
                 placeholder={currentQuestion.placeholder}
-                className="w-full p-4 border-2 border-gray-200 rounded-2xl text-lg focus:outline-none focus:border-emerald-500 bg-gray-50 focus:bg-white transition-all"
+                className="w-full p-4 border-2 border-gray-200 rounded-2xl text-lg focus:outline-none focus:border-emerald-500 focus:bg-white transition-all"
                 autoFocus
               />
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
+                {currentQuestion.icon}
+              </div>
             </div>
           )}
 
           {currentQuestion.multiple && (
             <div className="mt-4 text-center">
               <span className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full text-sm font-medium">
+                <span className="w-5 h-5 bg-emerald-500 text-white rounded-full flex items-center justify-center text-xs">
+                  {selectedSkills.length}
+                </span>
                 已选择 {selectedSkills.length} 项
               </span>
             </div>
@@ -255,10 +262,10 @@ export default function DiagnosePage() {
             <button
               onClick={handleSubmit}
               disabled={!canProceed()}
-              className={`w-full py-4 rounded-xl text-lg font-bold transition-all ${
+              className={`w-full py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-bold text-lg transition-all ${
                 canProceed()
-                  ? "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white hover:shadow-lg"
-                  : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                  ? "hover:from-emerald-600 hover:to-emerald-700 hover:shadow-lg"
+                  : "opacity-50 cursor-not-allowed"
               }`}
             >
               开始诊断 🚀
@@ -267,10 +274,10 @@ export default function DiagnosePage() {
             <button
               onClick={handleNext}
               disabled={!canProceed()}
-              className={`w-full py-4 rounded-xl text-lg font-bold transition-all ${
+              className={`w-full py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-bold text-lg transition-all ${
                 canProceed()
-                  ? "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white hover:shadow-lg"
-                  : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                  ? "hover:from-emerald-600 hover:to-emerald-700 hover:shadow-lg"
+                  : "opacity-50 cursor-not-allowed"
               }`}
             >
               下一步 →
