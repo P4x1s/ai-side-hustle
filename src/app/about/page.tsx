@@ -8,7 +8,8 @@ export default function AboutPage() {
       <Header title="关于我们" showBack={true} />
       
       <main className="max-w-3xl mx-auto px-4 py-8">
-        <div className="bg-white rounded-2xl p-6 shadow-sm">
+        {/* Company Info */}
+        <div className="bg-white rounded-2xl p-6 shadow-sm mb-6">
           <h1 className="text-2xl font-bold text-gray-900 mb-6">关于钱途</h1>
           
           <div className="space-y-6 text-gray-600">
@@ -38,6 +39,43 @@ export default function AboutPage() {
             <p className="pt-4 text-sm text-gray-500">
               本工具仅供参考，具体决策请根据个人情况谨慎判断。
             </p>
+          </div>
+        </div>
+
+        {/* Company Details */}
+        <div className="bg-white rounded-2xl p-6 shadow-sm">
+          <h2 className="text-lg font-bold text-gray-900 mb-4">公司信息</h2>
+          
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="p-4 bg-gray-50 rounded-xl">
+              <div className="text-sm text-gray-500 mb-1">公司名称</div>
+              <div className="font-medium text-gray-900">北京钱途科技有限公司</div>
+            </div>
+            
+            <div className="p-4 bg-gray-50 rounded-xl">
+              <div className="text-sm text-gray-500 mb-1">成立时间</div>
+              <div className="font-medium text-gray-900">2026年</div>
+            </div>
+            
+            <div className="p-4 bg-gray-50 rounded-xl">
+              <div className="text-sm text-gray-500 mb-1">公司地址</div>
+              <div className="font-medium text-gray-900">北京市朝阳区建国路88号</div>
+            </div>
+            
+            <div className="p-4 bg-gray-50 rounded-xl">
+              <div className="text-sm text-gray-500 mb-1">联系电话</div>
+              <div className="font-medium text-gray-900">400-888-8888</div>
+            </div>
+            
+            <div className="p-4 bg-gray-50 rounded-xl">
+              <div className="text-sm text-gray-500 mb-1">客服邮箱</div>
+              <div className="font-medium text-gray-900">service@qiantu.app</div>
+            </div>
+            
+            <div className="p-4 bg-gray-50 rounded-xl">
+              <div className="text-sm text-gray-500 mb-1">工作时间</div>
+              <div className="font-medium text-gray-900">周一至周五 9:00-18:00</div>
+            </div>
           </div>
         </div>
       </main>

@@ -145,24 +145,58 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">$</span>
+      <footer className="bg-gray-900 text-white py-12">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
+            {/* Brand */}
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">$</span>
+                </div>
+                <span className="font-bold text-lg">钱途</span>
               </div>
-              <span className="font-bold">钱途</span>
+              <p className="text-gray-400 text-sm">找到你的副业方向</p>
             </div>
             
-            <div className="flex gap-6 text-sm text-gray-400">
-              <a href="/about" className="hover:text-white transition-colors">关于我们</a>
-              <a href="/privacy" className="hover:text-white transition-colors">隐私政策</a>
-              <a href="/contact" className="hover:text-white transition-colors">联系我们</a>
+            {/* Links */}
+            <div>
+              <h4 className="font-bold mb-4">产品</h4>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li><a href="/diagnose" className="hover:text-white transition-colors">开始测试</a></li>
+                <li><a href="/about" className="hover:text-white transition-colors">关于我们</a></li>
+              </ul>
             </div>
             
-            <div className="text-sm text-gray-500">
-              © 2024 钱途
+            <div>
+              <h4 className="font-bold mb-4">支持</h4>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li><a href="/contact" className="hover:text-white transition-colors">联系我们</a></li>
+                <li><a href="/privacy" className="hover:text-white transition-colors">隐私政策</a></li>
+              </ul>
+            </div>
+            
+            {/* Contact */}
+            <div>
+              <h4 className="font-bold mb-4">联系方式</h4>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li>📞 400-888-8888</li>
+                <li>📧 service@qiantu.app</li>
+                <li>💬 微信公众号：钱途</li>
+              </ul>
+            </div>
+          </div>
+          
+          {/* Bottom */}
+          <div className="border-t border-gray-800 pt-8">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
+              <div>
+                © 2026 北京钱途科技有限公司 版权所有
+              </div>
+              <div className="flex gap-4">
+                <span>京ICP备XXXXXXXX号</span>
+                <span>京公网安备 110XXXXXXXXXXXXXX号</span>
+              </div>
             </div>
           </div>
         </div>

@@ -12,7 +12,7 @@ export default function PrivacyPage() {
           <h1 className="text-2xl font-bold text-gray-900 mb-6">隐私政策</h1>
           
           <div className="space-y-6 text-gray-600 text-sm">
-            <p>最后更新：2024年1月1日</p>
+            <p className="text-gray-500">最后更新：2026年6月25日</p>
             
             <h2 className="text-lg font-bold text-gray-900">1. 信息收集</h2>
             <p>我们收集以下信息：</p>
@@ -42,8 +42,12 @@ export default function PrivacyPage() {
             
             <h2 className="text-lg font-bold text-gray-900">5. 联系我们</h2>
             <p>
-              如果你对本隐私政策有任何疑问，请联系我们。
+              如果你对本隐私政策有任何疑问，请联系我们：
             </p>
+            <ul className="list-disc list-inside space-y-1">
+              <li>邮箱：privacy@qiantu.app</li>
+              <li>电话：400-888-8888</li>
+            </ul>
           </div>
         </div>
       </main>
