@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { getRecommendations, SideHustle, sideHustles } from "@/data/hustles";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useUserStorage } from "@/hooks/useUserStorage";
 import Header from "@/components/Header";
 
 function ResultContent() {
@@ -13,7 +13,7 @@ function ResultContent() {
   const [recommendations, setRecommendations] = useState<SideHustle[]>([]);
   const [allHustles, setAllHustles] = useState<SideHustle[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("推荐");
-  const [history, setHistory] = useLocalStorage<SideHustle[]>("hustle-history", []);
+  const [history, setHistory] = useUserStorage<SideHustle[]>("hustle-history", []);
 
   const formData = {
     city: searchParams.get("city") || "",

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useUserStorage } from "@/hooks/useUserStorage";
 import { SideHustle, sideHustles } from "@/data/hustles";
 
 interface UserProgress {
@@ -26,8 +26,8 @@ interface Achievement {
 export default function DashboardPage() {
   const router = useRouter();
   const { user, signOut } = useAuth();
-  const [history] = useLocalStorage<SideHustle[]>("hustle-history", []);
-  const [progress] = useLocalStorage<Record<string, UserProgress>>("hustle-progress", {});
+  const [history] = useUserStorage<SideHustle[]>("hustle-history", []);
+  const [progress] = useUserStorage<Record<string, UserProgress>>("hustle-progress", {});
   const [activeTab, setActiveTab] = useState<"overview" | "history" | "achievements" | "settings">("overview");
 
   useEffect(() => {
@@ -321,9 +321,12 @@ export default function DashboardPage() {
                 <button
                   onClick={() => {
                     if (confirm("确定要清除所有数据吗？此操作不可恢复。")) {
-                      localStorage.removeItem("hustle-history");
-                      localStorage.removeItem("hustle-progress");
-                      localStorage.removeItem("user-profile");
+                      // Clear user-specific data
+                      if (user) {
+                        localStorage.removeItem(`user_${user.id}_hustle-history`);
+                        localStorage.removeItem(`user_${user.id}_hustle-progress`);
+                        localStorage.removeItem(`user_${user.id}_user-profile`);
+                      }
                       window.location.reload();
                     }
                   }}

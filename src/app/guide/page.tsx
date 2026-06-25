@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { sideHustles } from "@/data/hustles";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useUserStorage } from "@/hooks/useUserStorage";
 
 interface Message {
   role: "ai" | "user";
@@ -23,7 +23,7 @@ function GuideContent() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
-  const [progress, setProgress] = useLocalStorage<Record<string, UserProgress>>("hustle-progress", {});
+  const [progress, setProgress] = useUserStorage<Record<string, UserProgress>>("hustle-progress", {});
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const hustleName = searchParams.get("name") || "社区团购团长";

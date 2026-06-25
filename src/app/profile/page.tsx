@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useUserStorage } from "@/hooks/useUserStorage";
 
 interface UserProfile {
   name: string;
@@ -17,7 +17,7 @@ interface UserProfile {
 export default function ProfilePage() {
   const router = useRouter();
   const { user } = useAuth();
-  const [profile, setProfile] = useLocalStorage<UserProfile>("user-profile", {
+  const [profile, setProfile] = useUserStorage<UserProfile>("user-profile", {
     name: "",
     bio: "",
     avatar: "",
