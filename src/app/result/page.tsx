@@ -47,7 +47,7 @@ function ResultContent() {
         <Header title="分析中" showBack={true} />
         <div className="flex items-center justify-center py-20">
           <div className="text-center">
-            <div className="w-16 h-16 mx-auto mb-4 bg-emerald-100 rounded-full flex items-center justify-center animate-pulse">
+            <div className="w-16 h-16 mx-auto mb-4 bg-amber-100 rounded-2xl flex items-center justify-center animate-pulse">
               <span className="text-3xl">🤖</span>
             </div>
             <h2 className="text-xl font-bold text-gray-900 mb-2">正在分析...</h2>
@@ -63,13 +63,12 @@ function ResultContent() {
       <div className="min-h-screen bg-gray-50">
         <Header title={selectedHustle.name} showBack={true} />
         <main className="max-w-2xl mx-auto px-4 py-6">
-          {/* Steps */}
           <div className="bg-white rounded-2xl p-6 shadow-sm mb-6">
             <h2 className="font-bold text-gray-900 mb-4">操作步骤</h2>
             <div className="space-y-4">
               {selectedHustle.steps.map((step, index) => (
                 <div key={index} className="flex gap-4">
-                  <div className="w-8 h-8 bg-emerald-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                  <div className="w-8 h-8 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
                     {index + 1}
                   </div>
                   <div className="flex-1 p-3 bg-gray-50 rounded-lg text-gray-700 text-sm">
@@ -80,7 +79,6 @@ function ResultContent() {
             </div>
           </div>
 
-          {/* Tips */}
           <div className="bg-amber-50 rounded-2xl p-5 border border-amber-100 mb-6">
             <div className="flex items-start gap-3">
               <span className="text-xl">💡</span>
@@ -91,7 +89,6 @@ function ResultContent() {
             </div>
           </div>
 
-          {/* Info */}
           <div className="grid grid-cols-2 gap-4 mb-6">
             <div className="bg-white rounded-xl p-4 shadow-sm text-center">
               <div className="text-xs text-gray-500 mb-1">难度</div>
@@ -104,17 +101,16 @@ function ResultContent() {
             </div>
             <div className="bg-white rounded-xl p-4 shadow-sm text-center">
               <div className="text-xs text-gray-500 mb-1">预期收入</div>
-              <div className="text-sm font-medium text-emerald-600">{selectedHustle.potential}</div>
+              <div className="text-sm font-medium text-amber-600">{selectedHustle.potential}</div>
             </div>
           </div>
 
-          {/* CTA */}
           <button
             onClick={() => {
               const params = new URLSearchParams({ name: selectedHustle.name });
               router.push(`/guide?${params.toString()}`);
             }}
-            className="w-full py-4 bg-emerald-500 text-white rounded-xl font-bold hover:bg-emerald-600 transition-colors"
+            className="w-full py-4 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-xl font-bold hover:shadow-lg transition-all"
           >
             开始执行 →
           </button>
@@ -127,7 +123,6 @@ function ResultContent() {
     <div className="min-h-screen bg-gray-50">
       <Header title="推荐结果" showBack={true} />
       <div className="max-w-2xl mx-auto px-4 py-6">
-        {/* Info */}
         <div className="bg-white rounded-2xl p-4 shadow-sm mb-6">
           <div className="text-xs text-gray-500 mb-2">你的情况</div>
           <div className="flex flex-wrap gap-2 text-sm">
@@ -137,16 +132,15 @@ function ResultContent() {
           </div>
         </div>
 
-        {/* Recommendations */}
         <div className="space-y-4">
           {recommendations.map((hustle, index) => (
             <div
               key={hustle.id}
               onClick={() => handleSelect(hustle)}
-              className="bg-white rounded-2xl p-5 shadow-sm cursor-pointer hover:shadow-md transition-all"
+              className="bg-white rounded-2xl p-5 shadow-sm cursor-pointer card-hover"
             >
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
                   <span className="text-xl">
                     {index === 0 ? "🥇" : index === 1 ? "🥈" : "🥉"}
                   </span>
@@ -162,7 +156,7 @@ function ResultContent() {
                     }`}>
                       {hustle.difficulty}
                     </span>
-                    <span className="text-xs px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                    <span className="text-xs px-2 py-1 rounded-full bg-amber-100 text-amber-700">
                       {hustle.potential}
                     </span>
                   </div>
@@ -173,34 +167,6 @@ function ResultContent() {
           ))}
         </div>
 
-        {/* Share */}
-        <div className="mt-6 p-4 bg-emerald-50 rounded-xl border border-emerald-100">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="font-medium text-emerald-900 text-sm">觉得有用？</div>
-              <div className="text-xs text-emerald-700">分享给需要的朋友</div>
-            </div>
-            <button
-              onClick={() => {
-                if (navigator.share) {
-                  navigator.share({
-                    title: "钱途 - 找到你的副业方向",
-                    text: "我发现了一个帮你找到副业方向的工具，推荐你试试",
-                    url: window.location.origin,
-                  });
-                } else {
-                  navigator.clipboard.writeText(window.location.origin);
-                  alert("链接已复制到剪贴板");
-                }
-              }}
-              className="px-4 py-2 bg-emerald-500 text-white rounded-lg text-sm font-medium hover:bg-emerald-600 transition-colors"
-            >
-              分享
-            </button>
-          </div>
-        </div>
-
-        {/* History */}
         {history.length > 0 && (
           <div className="mt-8">
             <h3 className="font-bold text-gray-900 mb-3">历史记录</h3>
@@ -209,7 +175,7 @@ function ResultContent() {
                 <div
                   key={hustle.id}
                   onClick={() => handleSelect(hustle)}
-                  className="bg-white rounded-xl p-4 shadow-sm cursor-pointer hover:shadow-md transition-all flex items-center justify-between"
+                  className="bg-white rounded-xl p-4 shadow-sm cursor-pointer card-hover flex items-center justify-between"
                 >
                   <div>
                     <div className="font-medium text-gray-900 text-sm">{hustle.name}</div>
@@ -239,7 +205,7 @@ export default function ResultPage() {
       <div className="min-h-screen bg-gray-50">
         <Header title="加载中" showBack={true} />
         <div className="flex items-center justify-center py-20">
-          <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center animate-pulse">
+          <div className="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center animate-pulse">
             <span className="text-3xl">🤖</span>
           </div>
         </div>

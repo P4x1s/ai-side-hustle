@@ -138,19 +138,19 @@ export default function DiagnosePage() {
       <Header title="自我诊断" showBack={true} />
 
       {/* Progress */}
-      <div className="bg-white border-b border-gray-100 px-4 py-3">
-        <div className="max-w-2xl mx-auto">
-          <div className="flex items-center justify-between text-sm mb-2">
-            <span className="text-gray-600">
+      <div className="bg-white border-b border-gray-100">
+        <div className="max-w-2xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-sm text-gray-500">
               {currentStep === 0 ? "准备开始" : `第 ${currentStep} 题`}
             </span>
-            <span className="font-medium text-emerald-600">
+            <span className="text-sm font-semibold text-amber-600">
               {currentStep + 1} / {questions.length}
             </span>
           </div>
           <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
             <div
-              className="h-full bg-emerald-500 rounded-full transition-all duration-500"
+              className="h-full bg-gradient-to-r from-amber-400 to-amber-500 rounded-full transition-all duration-500"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -158,10 +158,12 @@ export default function DiagnosePage() {
       </div>
 
       {/* Question */}
-      <main className="max-w-2xl mx-auto px-4 py-8">
+      <main className="max-w-2xl mx-auto px-4 py-10">
         <div className="animate-slide-up">
-          <div className="text-center mb-8">
-            <div className="text-6xl mb-4">{currentQuestion.icon}</div>
+          <div className="text-center mb-10">
+            <div className="w-20 h-20 mx-auto mb-6 bg-amber-100 rounded-2xl flex items-center justify-center">
+              <span className="text-4xl">{currentQuestion.icon}</span>
+            </div>
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight">
               {currentQuestion.question}
             </h2>
@@ -178,9 +180,9 @@ export default function DiagnosePage() {
                   <button
                     key={option.value}
                     onClick={() => handleSelect(option.value)}
-                    className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
+                    className={`w-full text-left p-5 rounded-2xl border-2 transition-all ${
                       isSelected
-                        ? "border-emerald-500 bg-emerald-50"
+                        ? "border-amber-500 bg-amber-50 shadow-sm"
                         : "border-gray-200 bg-white hover:border-gray-300"
                     }`}
                   >
@@ -192,23 +194,13 @@ export default function DiagnosePage() {
                       <div
                         className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
                           isSelected
-                            ? "border-emerald-500 bg-emerald-500"
+                            ? "border-amber-500 bg-amber-500"
                             : "border-gray-300"
                         }`}
                       >
                         {isSelected && (
-                          <svg
-                            className="w-4 h-4 text-white"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={3}
-                              d="M5 13l4 4L19 7"
-                            />
+                          <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                           </svg>
                         )}
                       </div>
@@ -218,21 +210,19 @@ export default function DiagnosePage() {
               })}
             </div>
           ) : (
-            <div className="relative">
-              <input
-                type="text"
-                value={formData[currentQuestion.id as keyof FormData]}
-                onChange={(e) => handleTextChange(e.target.value)}
-                placeholder={currentQuestion.placeholder}
-                className="w-full p-4 border-2 border-gray-200 rounded-xl text-lg focus:outline-none focus:border-emerald-500 bg-white transition-all"
-                autoFocus
-              />
-            </div>
+            <input
+              type="text"
+              value={formData[currentQuestion.id as keyof FormData]}
+              onChange={(e) => handleTextChange(e.target.value)}
+              placeholder={currentQuestion.placeholder}
+              className="w-full p-5 border-2 border-gray-200 rounded-2xl text-lg focus:outline-none focus:border-amber-500 bg-white transition-all"
+              autoFocus
+            />
           )}
 
           {currentQuestion.multiple && (
             <div className="mt-4 text-center">
-              <span className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full text-sm font-medium">
+              <span className="inline-flex items-center gap-2 px-4 py-2 bg-amber-100 text-amber-700 rounded-full text-sm font-medium">
                 已选择 {selectedSkills.length} 项
               </span>
             </div>
@@ -244,7 +234,7 @@ export default function DiagnosePage() {
           {currentStep > 0 && (
             <button
               onClick={handleBack}
-              className="px-6 py-4 bg-gray-100 text-gray-600 rounded-xl font-bold hover:bg-gray-200 transition-colors"
+              className="px-6 py-4 bg-gray-100 text-gray-600 rounded-xl font-medium hover:bg-gray-200 transition-colors"
             >
               上一步
             </button>
@@ -255,7 +245,7 @@ export default function DiagnosePage() {
               disabled={!canProceed()}
               className={`flex-1 py-4 rounded-xl text-lg font-bold transition-all ${
                 canProceed()
-                  ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                  ? "bg-gradient-to-r from-amber-500 to-amber-600 text-white hover:shadow-lg"
                   : "bg-gray-200 text-gray-400 cursor-not-allowed"
               }`}
             >
@@ -267,7 +257,7 @@ export default function DiagnosePage() {
               disabled={!canProceed()}
               className={`flex-1 py-4 rounded-xl text-lg font-bold transition-all ${
                 canProceed()
-                  ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                  ? "bg-gradient-to-r from-amber-500 to-amber-600 text-white hover:shadow-lg"
                   : "bg-gray-200 text-gray-400 cursor-not-allowed"
               }`}
             >
