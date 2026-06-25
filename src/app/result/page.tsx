@@ -173,6 +173,33 @@ function ResultContent() {
           ))}
         </div>
 
+        {/* Share */}
+        <div className="mt-6 p-4 bg-emerald-50 rounded-xl border border-emerald-100">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="font-medium text-emerald-900 text-sm">觉得有用？</div>
+              <div className="text-xs text-emerald-700">分享给需要的朋友</div>
+            </div>
+            <button
+              onClick={() => {
+                if (navigator.share) {
+                  navigator.share({
+                    title: "钱途 - 找到你的副业方向",
+                    text: "我发现了一个帮你找到副业方向的工具，推荐你试试",
+                    url: window.location.origin,
+                  });
+                } else {
+                  navigator.clipboard.writeText(window.location.origin);
+                  alert("链接已复制到剪贴板");
+                }
+              }}
+              className="px-4 py-2 bg-emerald-500 text-white rounded-lg text-sm font-medium hover:bg-emerald-600 transition-colors"
+            >
+              分享
+            </button>
+          </div>
+        </div>
+
         {/* History */}
         {history.length > 0 && (
           <div className="mt-8">
