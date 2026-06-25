@@ -21,12 +21,12 @@ export default function ContactPage() {
             
             <div className="p-4 bg-gray-50 rounded-xl">
               <h3 className="font-bold text-gray-900 mb-2">邮箱</h3>
-              <p className="text-gray-600">contact@ai-side-hustle.com</p>
+              <p className="text-gray-600">contact@qiantu.app</p>
             </div>
             
             <div className="p-4 bg-gray-50 rounded-xl">
               <h3 className="font-bold text-gray-900 mb-2">微信</h3>
-              <p className="text-gray-600">请在公众号搜索"AI副业教练"</p>
+              <p className="text-gray-600">请在公众号搜索"钱途"</p>
             </div>
             
             <div className="p-4 bg-gray-50 rounded-xl">

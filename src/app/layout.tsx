@@ -3,8 +3,8 @@ import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 
 export const metadata: Metadata = {
-  title: "AI副业教练 - 不上班也能赚到钱",
-  description: "告诉AI你的情况，它帮你找到能赚钱的路子，手把手带你做。",
+  title: "钱途 - 找到你的副业方向",
+  description: "不知道做什么副业？让AI帮你找到方向，手把手教你开始",
 };
 
 export default function RootLayout({

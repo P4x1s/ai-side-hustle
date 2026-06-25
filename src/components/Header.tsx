@@ -31,8 +31,10 @@ export default function Header({ title, showBack = false, showUser = true }: Hea
               onClick={() => router.push("/")}
               className="flex items-center gap-2 hover:opacity-80 transition-opacity"
             >
-              <span className="text-xl">💰</span>
-              <span className="text-base font-bold text-gray-900 hidden sm:block">AI副业教练</span>
+              <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">$</span>
+              </div>
+              <span className="text-lg font-bold text-gray-900">钱途</span>
             </button>
           </div>
 

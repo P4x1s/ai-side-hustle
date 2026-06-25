@@ -149,8 +149,10 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <span className="text-xl">💰</span>
-              <span className="font-bold">AI副业教练</span>
+              <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">$</span>
+              </div>
+              <span className="font-bold">钱途</span>
             </div>
             
             <div className="flex gap-6 text-sm text-gray-400">
@@ -160,7 +162,7 @@ export default function Home() {
             </div>
             
             <div className="text-sm text-gray-500">
-              © 2024 AI副业教练
+              © 2024 钱途
             </div>
           </div>
         </div>

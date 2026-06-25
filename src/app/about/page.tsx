@@ -9,11 +9,11 @@ export default function AboutPage() {
       
       <main className="max-w-3xl mx-auto px-4 py-8">
         <div className="bg-white rounded-2xl p-6 shadow-sm">
-          <h1 className="text-2xl font-bold text-gray-900 mb-6">关于 AI副业教练</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-6">关于钱途</h1>
           
           <div className="space-y-6 text-gray-600">
             <p>
-              AI副业教练是一个帮助普通人找到副业方向的工具。我们相信，每个人都有赚钱的潜力，只是需要找到适合自己的方向。
+              钱途是一个帮助普通人找到副业方向的工具。我们相信，每个人都有赚钱的潜力，只是需要找到适合自己的方向。
             </p>
             
             <h2 className="text-lg font-bold text-gray-900 pt-4">我们的目标</h2>
