@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Feedback from "@/components/Feedback";
+import Onboarding from "@/components/Onboarding";
 
 export const metadata: Metadata = {
   title: "钱途 - 找到你的副业方向",
@@ -13,6 +14,16 @@ export const metadata: Metadata = {
     type: "website",
     locale: "zh_CN",
   },
+  icons: {
+    icon: "/favicon.svg",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: "#f59e0b",
 };
 
 export default function RootLayout({
@@ -22,13 +33,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN">
-      <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <meta name="theme-color" content="#10b981" />
-      </head>
       <body className="min-h-screen">
         <AuthProvider>
           {children}
+          <Onboarding />
           <Feedback />
         </AuthProvider>
       </body>

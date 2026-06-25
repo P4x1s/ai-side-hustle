@@ -100,6 +100,14 @@ export default function LoginPage() {
               </div>
             </div>
 
+            <div className="flex items-center justify-between text-sm">
+              <label className="flex items-center gap-2 text-gray-600">
+                <input type="checkbox" className="rounded border-gray-300 text-amber-500 focus:ring-amber-500" />
+                记住登录
+              </label>
+              <a href="/reset-password" className="text-amber-600 hover:underline">忘记密码？</a>
+            </div>
+
             {error && (
               <div className="p-3 bg-red-50 text-red-600 rounded-xl text-sm">{error}</div>
             )}
